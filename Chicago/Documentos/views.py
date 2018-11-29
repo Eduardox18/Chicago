@@ -23,7 +23,7 @@ def ingresar(request):
 
 def registrar(request):
     if request.method == 'GET':
-        form = RegistroForm(user=request.user)
+        form = RegistroForm(use_required_attribute=False)
         return render(request, 'registro.html', {'form':form})
     elif request.method == 'POST':
         form = RegistroForm(request.POST)
