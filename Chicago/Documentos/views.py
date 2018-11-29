@@ -23,7 +23,7 @@ def ingresar(request):
 
 def registrar(request):
     if request.method == 'GET':
-        form = RegistroForm(use_required_attribute=False)
+        form = RegistroForm(user=request.user)
         return render(request, 'registro.html', {'form':form})
     elif request.method == 'POST':
         form = RegistroForm(request.POST)
@@ -53,32 +53,14 @@ def mostrar_info(request):
     return render(request, "info.html")
 
 def cuenta_usuario(request):
-    if request.method == 'GET':
-        form = EditarForm(use_required_attribute=False)
-        return render(request, 'cuenta.html', {'form': form})
-    elif request.method == "PUT":
-        form = EditarForm(request.PUT)
+    if request.method == 'POST':
+        form = EditarForm(request.POST, instance=request.user)
         if form.is_valid():
-            username = request.PUT.get('username', None)
-            email = request.PUT.get('email', None)
-            password = request.PUT.get('password', None)
-            first_name = request.PUT.get('first_name', None)
-            last_name = request.PUT.get('last_name', None)
-            try:
-                usuario = User.objects.get(pk = id)
-                usuario.username = username
-                usuario.email = email
-                usuario.first_name = first_name
-                usuario.last_name = last_name
-                usuario.save()
-                return redirect('/index/')
-            except:
-                return render(request, 'cuenta.html', {'form': 'Formulario completado'})
-        else:
-            form = EditarForm(request.PUT)
-            return render(request, 'cuenta.html', {'form': form})
-
-
+            form.save()
+            return redirect('/cuenta/')
+    else:
+        form = EditarForm(instance=request.user)
+        return render(request, "cuenta.html", {"form": form})
 
 def salir(request):
     logout(request)
