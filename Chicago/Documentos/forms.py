@@ -44,3 +44,44 @@ class RegistroForm(ModelForm):
             raise forms.ValidationError(
                 "Las contraseñas no coinciden, deben ser iguales"
             )
+
+
+class EditarForm(ModelForm):
+    password = forms.CharField(widget=PasswordInput())
+    confirmar_password = forms.CharField(widget=PasswordInput())
+
+    def __init__(self, *args, **kwargs):
+        super(EditarForm, self).__init__(*args, **kwargs)
+
+        self.fields['username'].max_length = 20
+        self.fields['username'].error_messages = {
+            'required': "Este campo es obligatorio."}
+        self.fields['username'].help_text = ''
+
+        self.fields['first_name'].max_length = 20
+        self.fields['first_name'].error_messages = {
+            'required': "Este campo es obligatorio."}
+
+        self.fields['last_name'].max_length = 20
+        self.fields['last_name'].error_messages = {
+            'required': "Este campo es obligatorio."}
+
+        self.fields['email'].max_length = 50
+        self.fields['email'].error_messages = {
+            'required': "Este campo es obligatorio."}
+        self.fields['email'].help_text = ''
+
+    class Meta:
+        """Meta definition for RegistroForm."""
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', 'password')
+
+    def clean(self):
+        cleaned_data = super(EditarForm, self).clean()
+        password = cleaned_data.get("password")
+        confirmar_password = cleaned_data.get("confirmar_password")
+
+        if password != confirmar_password:
+            raise forms.ValidationError(
+                "Las contraseñas no coinciden, deben ser iguales"
+            )

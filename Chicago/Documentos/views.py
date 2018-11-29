@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from Documentos.forms import RegistroForm
+from Documentos.forms import RegistroForm, EditarForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django import forms
@@ -51,6 +51,34 @@ def mostrar_repositorios(request):
 
 def mostrar_info(request):
     return render(request, "info.html")
+
+def cuenta_usuario(request):
+    if request.method == 'GET':
+        form = EditarForm(use_required_attribute=False)
+        return render(request, 'cuenta.html', {'form': form})
+    elif request.method == "PUT":
+        form = EditarForm(request.PUT)
+        if form.is_valid():
+            username = request.PUT.get('username', None)
+            email = request.PUT.get('email', None)
+            password = request.PUT.get('password', None)
+            first_name = request.PUT.get('first_name', None)
+            last_name = request.PUT.get('last_name', None)
+            try:
+                usuario = User.objects.get(pk = id)
+                usuario.username = username
+                usuario.email = email
+                usuario.first_name = first_name
+                usuario.last_name = last_name
+                usuario.save()
+                return redirect('/index/')
+            except:
+                return render(request, 'cuenta.html', {'form': 'Formulario completado'})
+        else:
+            form = EditarForm(request.PUT)
+            return render(request, 'cuenta.html', {'form': form})
+
+
 
 def salir(request):
     logout(request)

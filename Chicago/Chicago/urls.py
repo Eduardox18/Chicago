@@ -25,5 +25,6 @@ urlpatterns = [
     path('index/', abrir_home),
     path('logout/', salir),
     path('repositorios/', login_required(mostrar_repositorios)),
-    path('info/', mostrar_info)
+    path('info/', mostrar_info),
+    path('cuenta/', login_required(cuenta_usuario)),
 ]
