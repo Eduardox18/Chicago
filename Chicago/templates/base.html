@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="theme-color" content="red">
+
+  <title>Chicago Project</title>
+  <!-- Bootstrap core CSS-->
+  <link href="/static/bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom fonts for this template-->
+  <link href="/static/bootstrap/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <!-- Custom styles for this template-->
+
+  <link href="/static/bootstrap/css/sb-admin.css" rel="stylesheet">
+  <script src="/static/bootstrap/vendor/jquery/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+  <script src="/static/js/base.js"></script>
+  <script src="/static/js/busqueda.js"></script>
+
+  {% block estilos %}{% endblock %} 
+  {% block scripts %}{% endblock %}
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-dark" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: rgb(39, 36, 36);" id="mainNav">
+    
+    <a class="navbar-brand" href="/login/"> <!-- AQUÍ VA EL HOME DE LA APLICACIÓN, SI NO ESTÁ LOGEADO, LO REDIRIGE A LA PANTALLA DE LOGIN-->
+      <h5>Chicago
+        <i class="fa fa-cloud" aria-hidden="true" style="color:white"></i>
+      </h5>
+    </a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+      aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <!--sidebar-->
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        {% if user.is_authenticated %}
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Mis repositorios">
+          <a class="nav-link" href="/repositorios/">
+            <i class="fa fa-folder" aria-hidden="true"></i>
+            <span class="nav-link-text">Mis repositorios</span>
+          </a>
+        </li>
+        {% endif %}
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Acerca de...">
+          <a id='videos' class="nav-link" href="/info/">
+            <i class="fa fa-info-circle" aria-hidden="true"></i>
+            <span class="nav-link-text">Acerca de...</span>
+          </a>
+        </li>
+
+      </ul>
+      <ul class="navbar-nav sidenav-toggler" style="display">
+        <li class="nav-item">
+          <a class="nav-link text-center" id="sidenavToggler">
+            <i class="fa fa-fw fa-angle-left"></i>
+          </a>
+        </li>
+      </ul>
+      <!--sidebar-->
+      <!--Vídeos subiendo-->
+      <ul class="navbar-nav ml-auto">
+        {% if user.is_authenticated %}
+        <!--Vídeos subiendo-->
+        <!--Notificaciones -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle mr-lg-2" id="alertsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-fw fa-bell"></i>
+            <span class="d-lg-none">Notificaciones
+              <span id="numeroNotificaciones" class="badge badge-pill badge-danger numeroNotificaciones"></span>
+            </span>
+            <span id="numeroNotificacione" class="indicator text-warning d-none d-lg-block badge badge-pill badge-danger numeroNotificaciones">
+            </span>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="alertsDropdown">
+            <h6 class="dropdown-header">Notificaciones:</h6>
+            <div class="dropdown-divider"></div>
+            <ul class="dropdown-item" id = "notification-list" href="#">
+              
+              <li style="list-style-type:none" id = "noti-1">
+                <span class="">
+                  <strong>
+                      <i class="fa fa-fw fa-rebel" style="color:red"></i>No tienes notificaciones aún
+                    <i</>
+                  </strong>
+                </span>
+              </li>
+              <li style="list-style-type:none" id = "noti-2"></li>
+              <li style="list-style-type:none" id = "noti-3"></li>
+              <li style="list-style-type:none" id = "noti-4"></li>
+              <li style="list-style-type:none" id = "noti-5"></li>
+              
+            </ul>
+            <div class="dropdown-divider"></div>
+           
+          </div>
+        </li>
+        {% endif %}
+        <!--Notificaciones -->
+        <!--Búsqueda -->
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <form id="buscar" action="/search/" method="POST" class="form-inline my-2 my-lg-0 mr-lg-2">{% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" type="text" id="busqueda" placeholder="Buscar documentos" required name="nombre_documento">
+              <span class="input-group-btn">
+                <button id="button-buscar" class="btn btn-light" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        {% endif %}
+        <!--Búsqueda-->
+
+        <!--Logout-->
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="btn btn-danger" href="/logout/">
+            <i class="fa fa-fw fa-user-circle"></i>{{ user.username }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+            <i class="fa fa-fw fa-sign-out"></i>Salir</a>
+        </li>
+        {% else %}
+
+        {% if request.get_full_path == "/login/" %}
+        <li class="nav-item">
+          <a class="nav-link" href="/registro/">
+            <i class="fa fa-fw fa-address-card"></i> Registrar</a>
+        {% endif %}
+
+        {% if request.get_full_path == "/registro/" %}
+        <li class="nav-item">
+          <a class="nav-link" href="/login/">
+            <i class="fa fa-fw fa-sign-in"></i>Entrar</a>
+        {% endif %}
+
+        {% if request.get_full_path == "/info/" %}
+        <li class="nav-item">
+          <a class="nav-link" href="/registro/">
+            <i class="fa fa-fw fa-address-card"></i> Registrar</a>
+        <li class="nav-item">
+          <a class="nav-link" href="/login/">
+            <i class="fa fa-fw fa-sign-in"></i>Entrar</a>
+        {% endif %}
+        
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+
+      <h2>{% block titulo %}{% endblock %}</h2>
+
+      <h6>{% block subtitulo %}{% endblock subtitulo %}</h6>
+
+      <hr>
+      <div style="height: 100%;">
+        {% block contenido %}{% endblock %}
+      </div>
+    </div>
+    <!-- /.container-fluid-->
+
+
+
+    <!-- /.content-wrapper-->
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © Chicago
+            <i class="fa fa-cloud" aria-hidden="true" style="color:black"></i> 2018</small>
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">¿Desea salir?
+            </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Selecciona salir si estás listo para cerrar sesión</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+            <a class="btn btn-primary" href="/logout/">Salir</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap core JavaScript-->
+    <script src="/static/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="/static/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="/static/bootstrap/js/sb-admin.min.js"></script>
+    <!-- Custom scripts for this page-->
+    <!-- Toggle between fixed and static navbar-->
+    
+  </div>
+</body>
+
+</html>
