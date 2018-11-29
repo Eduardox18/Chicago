@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from Documentos.forms import RegistroForm
+from Documentos.forms import RegistroForm, EditarForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django import forms
@@ -23,7 +23,7 @@ def ingresar(request):
 
 def registrar(request):
     if request.method == 'GET':
-        form = RegistroForm(use_required_attribute=False)
+        form = RegistroForm(user=request.user)
         return render(request, 'registro.html', {'form':form})
     elif request.method == 'POST':
         form = RegistroForm(request.POST)
@@ -51,6 +51,16 @@ def mostrar_repositorios(request):
 
 def mostrar_info(request):
     return render(request, "info.html")
+
+def cuenta_usuario(request):
+    if request.method == 'POST':
+        form = EditarForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('/cuenta/')
+    else:
+        form = EditarForm(instance=request.user)
+        return render(request, "cuenta.html", {"form": form})
 
 def salir(request):
     logout(request)

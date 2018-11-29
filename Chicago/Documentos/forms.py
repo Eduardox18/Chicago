@@ -3,6 +3,7 @@ from django.template.defaultfilters import filesizeformat
 from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator 
+from django.contrib.auth.forms import UserChangeForm
 
 class RegistroForm(ModelForm):
     password= forms.CharField(widget=PasswordInput())
@@ -44,3 +45,15 @@ class RegistroForm(ModelForm):
             raise forms.ValidationError(
                 "Las contraseñas no coinciden, deben ser iguales"
             )
+
+
+class EditarForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = (
+            "username",
+            "first_name",
+            "last_name",
+            "email"
+        )
+    
