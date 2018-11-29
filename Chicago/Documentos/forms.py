@@ -8,30 +8,30 @@ class RegistroForm(ModelForm):
     password= forms.CharField(widget=PasswordInput())
     confirmar_password=forms.CharField(widget=PasswordInput())
 
-    
+
     def __init__(self, *args, **kwargs):
         super(RegistroForm, self).__init__(*args, **kwargs)
 
         self.fields['username'].required = True
         self.fields['username'].max_length = 20
-        self.fields['username'].error_messages = {'required': "Este campo es requerido"}
+        self.fields['username'].error_messages = {'required': "Este campo es obligatorio."}
         self.fields['username'].help_text = 'Se utilizará este nombre de usuario para invitar a los demás a su repositorio.'
 
         self.fields['first_name'].required = True
         self.fields['first_name'].max_length = 20
-        self.fields['first_name'].error_messages = {'required': "Este campo es requerido"}
+        self.fields['first_name'].error_messages = {'required': "Este campo es obligatorio."}
 
         self.fields['last_name'].required = True
         self.fields['last_name'].max_length = 20
-        self.fields['last_name'].error_messages = {'required': "Este campo es requerido"}
+        self.fields['last_name'].error_messages = {'required': "Este campo es obligatorio."}
 
         self.fields['email'].required = True
         self.fields['email'].max_length = 50
-        self.fields['email'].error_messages = {'required': "Este campo es requerido"}
+        self.fields['email'].error_messages = {'required': "Este campo es obligatorio."}
         self.fields['email'].help_text = 'Se utilizará este correo electrónico para verificar su cuenta.'
         
     class Meta:
-        """Meta definition for Videoform."""
+        """Meta definition for RegistroForm."""
         model = User
         fields = ('username', 'first_name','last_name','email','password')
     
