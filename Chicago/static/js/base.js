@@ -1,4 +1,4 @@
-$(function() {
+/*$(function() {
 	notificaciones()
 	setInterval(notificaciones, 3000);
 	var check = false;
@@ -71,5 +71,5 @@ function notificaciones(){
 }
 
 
-
+*/
 	

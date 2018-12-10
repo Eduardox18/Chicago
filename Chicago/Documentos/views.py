@@ -58,9 +58,25 @@ def cuenta_usuario(request):
         if form.is_valid():
             form.save()
             return redirect('/cuenta/')
+    elif request.method =='DELETE':
+        usuario = User.objects.get(username = request.user.username)
+        print(usuario.username)
+        usuario.is_active = False
+        usuario.save()
+        logout(request)
+        return redirect('/login/')
     else:
         form = EditarForm(instance=request.user)
         return render(request, "cuenta.html", {"form": form})
+
+def borrar_usuario(request):
+    if request.method == 'POST':
+        usuario = User.objects.get(username=request.user.username)
+        print(usuario.username)
+        usuario.is_active = False
+        usuario.save()
+        logout(request)
+        return redirect('/login/')
 
 def salir(request):
     logout(request)

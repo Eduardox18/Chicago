@@ -26,5 +26,6 @@ urlpatterns = [
     path('logout/', salir),
     path('repositorios/', login_required(mostrar_repositorios)),
     path('info/', mostrar_info),
+    path('delete/', borrar_usuario),
     path('cuenta/', login_required(cuenta_usuario)),
 ]

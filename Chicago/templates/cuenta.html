@@ -20,11 +20,11 @@
     <div class="card card-register mx-auto mt-18">
         <div class="card-header">Eliminar cuenta</div>
         <div class="card-body">
-            <form action="" method="post" id="form" enctype="multipart/form-data">
+            <form action="/delete/" method="post" id="form-delete" enctype="multipart/form-data">{% csrf_token %}
                 <div class="row">
                     <label for="eliminar" class="col-md-8">¿Está seguro de que desea eliminar su cuenta?</label>
                     <div class=" col-md-4" style="margin: 0 auto; text-align: right;">
-                        <button type="submit" class="btn btn-danger" value="Guardar">Eliminar</button>
+                        <button type="submit" class="btn btn-danger" value="Eliminar">Eliminar</button>
                     </div>
                 </div>
             </form>
