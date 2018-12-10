@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block titulo %}{{nombre_repo}}{% endblock %}
+
+{% block contenido %}
+<br>
+<div class="container">
+    <div class="row">
+
+        {% for documento in documentos %}
+        <div class="col-md-2" href="#">
+            <div class="card-body">
+                <img src="/media/icon_documento.png" href="#" class="img-thumbnail">
+                <h5 class="card-title">{{documento.nombreDoc}}</h5>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="col-sm-2">
+            <div class="card-body">
+                <a href="/crearDocumento/{{id_repo}}"><img src="/media/icon_add_documento.png" class="img-thumbnail"></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}

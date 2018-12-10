@@ -2,14 +2,24 @@
 {% block titulo %}Mis repositorios{% endblock %}
 
 {% block contenido %}
-{% if mensaje == 'error' %}
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <strong>Usuario o contraseña incorrectos</strong> 
-      </div>
-{% endif %}
-  <!-- Bootstrap core JavaScript-->
-  {% endblock %}
-  
+
+<br>
+<div class="container">
+    <div class="row">
+        {% for repositorio in repositorios %}
+        <div class="col-sm-2" href="#">
+            <div class="card-body">
+                <a href="/documentos/{{repositorio.id}}" ><img src="/media/icon_repositorio.png" class="img-thumbnail"></a>
+                <h5 class="card-title">{{repositorio.nombre}}</h5>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="col-sm-2">
+            <div class="card-body">
+                <a href="/crearRepositorio/"><img src="/media/icon_add_repositorio.png" class="img-thumbnail"></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock contenido %}

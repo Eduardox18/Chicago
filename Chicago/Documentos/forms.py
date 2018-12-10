@@ -4,6 +4,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator 
 from django.contrib.auth.forms import UserChangeForm
+from Documentos.models import *
 
 class RegistroForm(ModelForm):
     password= forms.CharField(widget=PasswordInput())
@@ -55,5 +56,21 @@ class EditarForm(UserChangeForm):
             "first_name",
             "last_name",
             "email"
+        )
+
+class RepositorioForm(ModelForm):
+
+    class Meta:
+        model = Repositorio
+        fields = ('__all__')
+        exclude = ('idUsuario',)
+
+class DocumentoForm(ModelForm):
+
+    class Meta:
+        model = Documento
+        fields = (
+            "documento",
+            "fechaLimite"
         )
     

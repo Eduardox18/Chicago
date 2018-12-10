@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from Documentos.forms import RegistroForm, EditarForm
+from Documentos.forms import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django import forms
@@ -47,7 +47,18 @@ def abrir_home(request):
     return render(request, "index.html")
 
 def mostrar_repositorios(request):
-    return render(request, "repositorios.html")
+    if request.method == "GET":
+        repositorios = Repositorio.objects.filter(idUsuario = request.user)
+        context = {'repositorios': repositorios}
+        return render(request, "repositorios.html", context)
+
+def mostrar_documentos(request, id_repo):
+    documentos = Documento.objects.filter(idRepositorio = id_repo)
+    nombre_repo = Repositorio.objects.get(id = id_repo)
+    id_repo = nombre_repo.id
+    nombre_repo = nombre_repo.nombre
+    context = {"documentos": documentos, "nombre_repo": nombre_repo, "id_repo": id_repo}
+    return render(request, "documentos.html", context)
 
 def mostrar_info(request):
     return render(request, "info.html")
@@ -77,6 +88,38 @@ def borrar_usuario(request):
         usuario.save()
         logout(request)
         return redirect('/login/')
+
+def crear_repositorio(request):
+    repositorioForm = RepositorioForm()
+
+    if request.method == "GET":
+        return render(request,"registro_repositorio.html", {'form':repositorioForm})
+    if request.method == "POST":
+        repositorioForm = RepositorioForm(request.POST)
+        if repositorioForm.is_valid():
+            repositorioForm.instance.idUsuario = request.user
+            repositorioForm.save()
+
+            return redirect("/repositorios/")
+        else:
+            return render(request,'registro_repositorio.html',{'form':repositorioForm})
+
+def crear_documento(request, id_repo):
+    documentoForm = DocumentoForm()
+
+    if request.method == "GET":
+        return render (request, "registro_documento.html", {'form': documentoForm})
+    elif request.method == "POST":
+        documentoForm = DocumentoForm(request.POST, request.FILES)
+        if documentoForm.is_valid():
+            #Recupera el nombre de archivo y lo separa de la extensión
+            nombre_archivo = request.FILES["documento"].name.split(".")
+            documentoForm.instance.nombreDoc = nombre_archivo[0]
+            documentoForm.instance.idRepositorio_id = id_repo
+            documentoForm.save()
+            return redirect("/documentos/"+str(id_repo))
+        else:
+            return render(request,'registro_documento.html', {'form': documentoForm})
 
 def salir(request):
     logout(request)
