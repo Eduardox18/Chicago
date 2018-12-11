@@ -170,7 +170,16 @@
 			<h2>{% block titulo %}{% endblock %}</h2>
 
 			<h6>{% block subtitulo %}{% endblock subtitulo %}</h6>
-
+			
+			{% if user.is_authenticated %}
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb" id="migajas">
+						<li class="breadcrumb-item"><a href="/repositorios/">Mis repositorios</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Library</li>
+					</ol>
+				</nav>
+			{% endif %}
+				
 			<div style="height: 100%;">
 				{% block contenido %}{% endblock %}
 			</div>

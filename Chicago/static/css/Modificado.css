@@ -1,0 +1,9 @@
+.card-body {
+    max-height: 220px!important;
+}
+
+.card-title {
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}

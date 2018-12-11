@@ -1,9 +1,10 @@
 from django.db import models
+from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
+import os
 
 class Usuario(models.Model):
-
     usuario = models.OneToOneField(User, on_delete = models.CASCADE)
     imagen_perfil = models.ImageField( validators=[FileExtensionValidator(["jpg", "png"])], upload_to="imagenesPerfil", default="")
     """Model definition for Usuario."""
@@ -15,7 +16,6 @@ class Usuario(models.Model):
         verbose_name_plural = 'Usuarios'
 
 class Repositorio(models.Model):
-
     nombre = models.CharField(max_length=100)
     idUsuario = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -26,12 +26,11 @@ class Repositorio(models.Model):
         verbose_name_plural = 'Repositorios'
 
 class Documento(models.Model):
-
     nombreDoc = models.CharField(max_length=100)
     fechaSubida = models.DateField(auto_now_add=True)
     fechaLimite = models.DateField()
     idRepositorio = models.ForeignKey(Repositorio, on_delete=models.CASCADE)
-    documento = models.FileField()
+    documento = models.FileField(upload_to="documentos")
 
     class Meta:
         verbose_name = 'Documento'

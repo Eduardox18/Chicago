@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% block titulo %}Mis repositorios{% endblock %}
 
+
+{% block estilos %}
+    <link rel="stylesheet" href="/static/css/Modificado.css">
+{% endblock estilos %}
+    
+
 {% block contenido %}
 
 <br>
@@ -9,14 +15,14 @@
         {% for repositorio in repositorios %}
         <div class="col-sm-2" href="#">
             <div class="card-body">
-                <a href="/documentos/{{repositorio.id}}" ><img src="/media/icon_repositorio.png" class="img-thumbnail"></a>
-                <h5 class="card-title">{{repositorio.nombre}}</h5>
+                <a href="/documentos/{{repositorio.id}}" ><img src="/media/icons/icon_repositorio.png" class="img-thumbnail"></a>
+                <h5 class="card-title text-center">{{repositorio.nombre}}</h5>
             </div>
         </div>
         {% endfor %}
         <div class="col-sm-2">
             <div class="card-body">
-                <a href="/crearRepositorio/"><img src="/media/icon_add_repositorio.png" class="img-thumbnail"></a>
+                <a href="/crearRepositorio/"><img src="/media/icons/icon_add_repositorio.png" class="img-thumbnail"></a>
             </div>
         </div>
     </div>
