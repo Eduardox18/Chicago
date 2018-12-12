@@ -22,6 +22,7 @@
 	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 	<script src="/static/js/base.js"></script>
 	<script src="/static/js/busqueda.js"></script>
+	<script src="/static/js/navegacion.js"></script>
 
 	{% block estilos %}{% endblock %}
 	{% block scripts %}{% endblock %}
@@ -165,7 +166,6 @@
 	</nav>
 	<div class="content-wrapper">
 		<div class="container-fluid">
-			<!-- Breadcrumbs-->
 
 			<h2>{% block titulo %}{% endblock %}</h2>
 
@@ -174,8 +174,7 @@
 			{% if user.is_authenticated %}
 				<nav aria-label="breadcrumb">
 					<ol class="breadcrumb" id="migajas">
-						<li class="breadcrumb-item"><a href="/repositorios/">Mis repositorios</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Library</li>
+						<li class="breadcrumb-item"><a href="#">Inicio</a></li>
 					</ol>
 				</nav>
 			{% endif %}

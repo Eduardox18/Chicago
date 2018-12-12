@@ -4,32 +4,31 @@
 {% block contenido %}
 {% if mensaje == 'error' %}
 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <strong>Usuario o contraseña incorrectos</strong> 
-      </div>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>Usuario o contraseña incorrectos</strong>
+</div>
 {% endif %}
 
-  <div class="container">
+<div class="container">
     <div class="card card-login mx-auto mt-5">
-      <div class="card-header">Iniciar sesión</div>
-      <div class="card-body">
-        <form id = "form" action="/login/" method="POST">{% csrf_token %}
-          <div class="form-group">
-            <label for="exampleInputEmail1">Usuario</label>
-            <input class="form-control" id="username" name = "username" required placeholder="Introduce tu usuario">
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Contraseña</label>
-            <input class="form-control" id="password" name = "password" required type="password" placeholder="Introduce tu contraseña">
-          </div>
-        
-          <button type='submit' id = "button" class="btn btn-primary btn-block">Entrar</button>
-        </form>
-      </div>
+        <div class="card-header">Iniciar sesión</div>
+        <div class="card-body">
+            <form id="form" action="/login/" method="POST">{% csrf_token %}
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Usuario</label>
+                    <input class="form-control" id="username" name="username" required placeholder="Introduce tu usuario">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Contraseña</label>
+                    <input class="form-control" id="password" name="password" required type="password" placeholder="Introduce tu contraseña">
+                </div>
+
+                <button type='submit' id="button" class="btn btn-primary btn-block">Entrar</button>
+            </form>
+        </div>
     </div>
-  </div>
-  <!-- Bootstrap core JavaScript-->
-  {% endblock %}
-  
+</div>
+<!-- Bootstrap core JavaScript-->
+{% endblock %}

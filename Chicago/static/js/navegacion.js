@@ -1,3 +1,5 @@
 $(document).ready(function (){
-    $("#migajas")
+    $(".breadcrumb-item").click(function (e) { 
+        alert(window.location.pathname);
+    });
 });

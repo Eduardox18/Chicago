@@ -1,5 +1,5 @@
-.card-body {
-    max-height: 220px!important;
+.img-thumbnail {
+    border: 0px !important;
 }
 
 .card-title {

@@ -10,21 +10,21 @@
     
 
 {% block contenido %}
-<br>
+  
 <div class="container">
     <div class="row">
 
         {% for documento in documentos %}
-        <div class="col-md-2">
+        <div class="col-4 col-sm-4 col-md-3 col-lg-2 col-xl-2">
             <div class="card-body">
-                <a href="#"><img src="/media/icons/icon_documento.png" class="img-thumbnail"></a>
-                <h5 class="card-title text-center">{{documento.nombreDoc}}</h5>
+                <a href="#"><img src="/media/icons/icon_documento.svg" class="img-thumbnail"></a>
+                <p class="card-title text-center">{{documento.nombreDoc}}</p>
             </div>
         </div>
         {% endfor %}
-        <div class="col-sm-2">
+        <div class="col-4 col-sm-4 col-md-3 col-lg-2 col-xl-2">
             <div class="card-body">
-                <a href="/crearDocumento/{{id_repo}}"><img src="/media/icons/icon_add_documento.png" class="img-thumbnail"></a>
+                <a href="/crearDocumento/{{id_repo}}"><img src="/media/icons/icon_nuevo_documento.svg" class="img-thumbnail"></a>
             </div>
         </div>
     </div>

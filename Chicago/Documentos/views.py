@@ -119,7 +119,8 @@ def crear_documento(request, id_repo):
             documentoForm.save()
             return redirect("/documentos/"+str(id_repo))
         else:
-            return render(request,'registro_documento.html', {'form': documentoForm})
+            context = {'form': documentoForm, 'mensaje': 'error'}
+            return render(request,'registro_documento.html', context)
 
 def salir(request):
     logout(request)

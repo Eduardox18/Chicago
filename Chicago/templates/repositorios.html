@@ -13,16 +13,16 @@
 <div class="container">
     <div class="row">
         {% for repositorio in repositorios %}
-        <div class="col-sm-2" href="#">
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2" href="#">
             <div class="card-body">
-                <a href="/documentos/{{repositorio.id}}" ><img src="/media/icons/icon_repositorio.png" class="img-thumbnail"></a>
-                <h5 class="card-title text-center">{{repositorio.nombre}}</h5>
+                <a href="/documentos/{{repositorio.id}}" ><img width="100%" src="/media/icons/folder_icon.svg" class="img-thumbnail"></a>
+                <p class="card-title text-center">{{repositorio.nombre}}</p>
             </div>
         </div>
         {% endfor %}
-        <div class="col-sm-2">
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
             <div class="card-body">
-                <a href="/crearRepositorio/"><img src="/media/icons/icon_add_repositorio.png" class="img-thumbnail"></a>
+                <a href="/crearRepositorio/"><img src="/media/icons/folder_nuevo_icon.svg" class="img-thumbnail"></a>
             </div>
         </div>
     </div>
