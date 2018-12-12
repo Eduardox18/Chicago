@@ -1,15 +1,24 @@
 {% extends "base.html" %}
 {% block titulo %}Página principal{% endblock %}
 
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb" id="migajas">
+        <li class="breadcrumb-item active" aria-current="page">Inicio</li>
+    </ol>
+</nav>
+{% endblock breadcrumb %}
+
+
 {% block contenido %}
 {% if mensaje == 'error' %}
 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <strong>Usuario o contraseña incorrectos</strong> 
-      </div>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>Usuario o contraseña incorrectos</strong>
+</div>
 {% endif %}
-  <!-- Bootstrap core JavaScript-->
-  {% endblock %}
-  
+<!-- Bootstrap core JavaScript-->
+{% endblock %}

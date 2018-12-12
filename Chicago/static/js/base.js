@@ -69,7 +69,8 @@ function notificaciones(){
 
 	} });
 }
-
-
 */
+
+$(document).ready(function () {
+});
 	

@@ -1,3 +1,7 @@
+body{
+    font-family: 'Quicksand', sans-serif!important;
+}
+
 .img-thumbnail {
     border: 0px !important;
 }
@@ -6,4 +10,8 @@
     white-space: nowrap;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
+}
+
+.chicago {
+    font-size: 1.50rem;
 }

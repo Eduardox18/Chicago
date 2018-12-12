@@ -17,12 +17,13 @@
 	<!-- Custom styles for this template-->
 
 	<link href="/static/bootstrap/css/sb-admin.css" rel="stylesheet">
+	<link rel="stylesheet" href="/static/css/Modificado.css">
+	<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
 	<script src="/static/bootstrap/vendor/jquery/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 	<script src="/static/js/base.js"></script>
 	<script src="/static/js/busqueda.js"></script>
-	<script src="/static/js/navegacion.js"></script>
 
 	{% block estilos %}{% endblock %}
 	{% block scripts %}{% endblock %}
@@ -35,7 +36,8 @@
 
 		<a class="navbar-brand" href="/login/">
 			<!-- AQUÍ VA EL HOME DE LA APLICACIÓN, SI NO ESTÁ LOGEADO, LO REDIRIGE A LA PANTALLA DE LOGIN-->
-			<h5>Chicago
+			<h5 class="chicago">
+				Chicago
 				<i class="fa fa-cloud" aria-hidden="true" style="color:white"></i>
 			</h5>
 		</a>
@@ -166,18 +168,15 @@
 	</nav>
 	<div class="content-wrapper">
 		<div class="container-fluid">
+			
+			{% block breadcrumb %}
+				
+			{% endblock breadcrumb %}
+				
 
 			<h2>{% block titulo %}{% endblock %}</h2>
 
 			<h6>{% block subtitulo %}{% endblock subtitulo %}</h6>
-			
-			{% if user.is_authenticated %}
-				<nav aria-label="breadcrumb">
-					<ol class="breadcrumb" id="migajas">
-						<li class="breadcrumb-item"><a href="#">Inicio</a></li>
-					</ol>
-				</nav>
-			{% endif %}
 				
 			<div style="height: 100%;">
 				{% block contenido %}{% endblock %}
@@ -191,8 +190,9 @@
 		<footer class="sticky-footer">
 			<div class="container">
 				<div class="text-center">
-					<small>Copyright © Chicago
-						<i class="fa fa-cloud" aria-hidden="true" style="color:black"></i> 2018</small>
+					<small class="footer-chicago">
+						Copyright © Chicago<i class="fa fa-cloud" aria-hidden="true" style="color:black"></i> 2018
+					</small>
 				</div>
 			</div>
 		</footer>
