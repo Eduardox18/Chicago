@@ -42,9 +42,10 @@ class Notificacion(models.Model):
         verbose_name_plural = 'Notificaciones'
 
 class Chat(models.Model):
-    idUsuarioRemitente = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    idUsuarioDestinatario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    idUsuarioRemitente = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='remitente')
+    idUsuarioDestinatario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='destinatario')
     mensaje = models.CharField(max_length=100)
+
 
     class Meta:
         verbose_name = 'Chat'
