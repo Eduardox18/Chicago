@@ -144,47 +144,50 @@
 				{% if request.get_full_path == "/login/" %}
 				<li class="nav-item">
 					<a class="nav-link" href="/registro/">
-						<i class="fa fa-fw fa-address-card"></i> Registrar</a>
-					{% endif %}
+						<i class="fa fa-fw fa-address-card"></i> Registrar
+					</a>
+				</li>
+				{% endif %}
 
-					{% if request.get_full_path == "/registro/" %}
+				{% if request.get_full_path == "/registro/" %}
 				<li class="nav-item">
 					<a class="nav-link" href="/login/">
-						<i class="fa fa-fw fa-sign-in"></i>Entrar</a>
-					{% endif %}
+						<i class="fa fa-fw fa-sign-in"></i>Entrar
+					</a>
+				</li>
+				{% endif %}
 
-					{% if request.get_full_path == "/info/" %}
+				{% if request.get_full_path == "/info/" %}
 				<li class="nav-item">
 					<a class="nav-link" href="/registro/">
-						<i class="fa fa-fw fa-address-card"></i> Registrar</a>
+						<i class="fa fa-fw fa-address-card"></i> Registrar
+					</a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="/login/">
-						<i class="fa fa-fw fa-sign-in"></i>Entrar</a>
-					{% endif %}
+						<i class="fa fa-fw fa-sign-in"></i>Entrar
+					</a>
+				</li>
+				{% endif %}
 
-					{% endif %}
+				{% endif %}
 			</ul>
 		</div>
 	</nav>
 	<div class="content-wrapper">
 		<div class="container-fluid">
-			
-			{% block breadcrumb %}
-				
-			{% endblock breadcrumb %}
-				
+
+			{% block breadcrumb %}{% endblock breadcrumb %}
 
 			<h2>{% block titulo %}{% endblock %}</h2>
 
 			<h6>{% block subtitulo %}{% endblock subtitulo %}</h6>
-				
+
 			<div style="height: 100%;">
 				{% block contenido %}{% endblock %}
 			</div>
 		</div>
 		<!-- /.container-fluid-->
-
-
 
 		<!-- /.content-wrapper-->
 		<footer class="sticky-footer">
