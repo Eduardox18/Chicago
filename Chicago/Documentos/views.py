@@ -23,24 +23,16 @@ def ingresar(request):
 
 def registrar(request):
     if request.method == 'GET':
-        form = RegistroForm(use_required_attribute=False)
+        form = CrearUsuarioForm(use_required_attribute=False)
         return render(request, 'registro.html', {'form':form})
     elif request.method == 'POST':
-        form = RegistroForm(request.POST)
+        form = CrearUsuarioForm(request.POST, request.FILES)
         if form.is_valid():
-            username = request.POST.get('username', None)
-            email = request.POST.get('email',None)
-            password = request.POST.get('password', None)
-            first_name = request.POST.get('first_name', None)
-            last_name = request.POST.get('last_name', None)
-            try:
-                user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
-                user.save()
-                return render(request, 'login.html', {'form':form})
-            except:
-                return render(request, 'registro.html', {'form':'Formulario completado'})
+            form.save()
+            return render(request, 'login.html', {'form':form})
         else:
-            form = RegistroForm(request.POST)
+            print("no jaló")
+            form = CrearUsuarioForm(request.POST)
             return render(request, 'registro.html',{'form':form})
 
 def abrir_home(request):
@@ -65,7 +57,7 @@ def mostrar_info(request):
 
 def cuenta_usuario(request):
     if request.method == 'POST':
-        form = EditarForm(request.POST, instance=request.user)
+        form = ModificarUsuarioForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
             return redirect('/cuenta/')
@@ -77,7 +69,7 @@ def cuenta_usuario(request):
         logout(request)
         return redirect('/login/')
     else:
-        form = EditarForm(instance=request.user)
+        form = ModificarUsuarioForm(instance=request.user)
         return render(request, "cuenta.html", {"form": form})
 
 def borrar_usuario(request):

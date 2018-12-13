@@ -3,8 +3,21 @@ from django.template.defaultfilters import filesizeformat
 from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator 
-from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from Documentos.models import *
+
+class CrearUsuarioForm(UserCreationForm):
+    class Meta(UserCreationForm):
+        model = Usuario
+        fields = ["username", "first_name", "last_name",
+                  "email", "imagen_perfil"]
+
+class ModificarUsuarioForm(UserChangeForm):
+    class Meta(UserChangeForm):
+        model = Usuario
+        fields = ["username", "first_name", "last_name",
+                  "email", "imagen_perfil"]
+
 
 class RegistroForm(ModelForm):
     password= forms.CharField(widget=PasswordInput())

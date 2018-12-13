@@ -1,9 +1,16 @@
 from django.db import models
 from django import forms
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 from django.core.validators import FileExtensionValidator
-from uuid import uuid4
 
+class Usuario(AbstractUser):
+    imagen_perfil = models.ImageField(
+        validators=[FileExtensionValidator(["jpg", "png"])], upload_to="imagenesPerfil")
+
+    def __str__(self):
+        return self.username
+
+'''
 class Usuario(models.Model):
     usuario = models.OneToOneField(User, on_delete = models.CASCADE)
     imagen_perfil = models.ImageField(validators=[FileExtensionValidator(["jpg", "png"])], upload_to="imagenesPerfil", default="")
@@ -14,10 +21,11 @@ class Usuario(models.Model):
 
         verbose_name = 'Usuario'
         verbose_name_plural = 'Usuarios'
+'''
 
 class Repositorio(models.Model):
     nombre = models.CharField(max_length=100)
-    idUsuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    idUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
 
     class Meta:
         """Meta definition for Repositorio"""
@@ -38,7 +46,7 @@ class Documento(models.Model):
         verbose_name_plural = 'Documentos'
 
 class Permiso(models.Model):
-    idUsuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    idUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     idDocumento = models.ForeignKey(Documento, on_delete = models.CASCADE)
     firmado = models.BooleanField()
 
