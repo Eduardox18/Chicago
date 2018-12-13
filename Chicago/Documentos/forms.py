@@ -71,13 +71,6 @@ class EditarForm(UserChangeForm):
             "email"
         )
 
-class RepositorioForm(ModelForm):
-
-    class Meta:
-        model = Repositorio
-        fields = ('__all__')
-        exclude = ('idUsuario',)
-
 class DocumentoForm(ModelForm):
 
     class Meta:
