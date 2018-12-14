@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.db import transaction
 from django import forms
+from django.http import JsonResponse
 from .models import *
 
 def ingresar(request):
@@ -122,6 +123,20 @@ def crear_documento(request):
         else:
             context = {'form': documentoForm, 'mensaje': 'error'}
             return render(request,'registro_documento.html', context)
+
+def mostrar_chat(request):
+    return render(request, "chat.html")
+
+def mandar_mensaje(request, destinatario, mensaje):
+    if request.method == "POST":
+        try:
+            chat = Chat(idUsuarioRemitente=request.user.id, idUsuarioDestinatario = destinatario, mensaje = mensaje)
+            chat.save()
+            data = {"resultado": True}
+        except:
+            data = {"resultado": False}
+
+        return JsonResponse(data)
 
 def salir(request):
     logout(request)

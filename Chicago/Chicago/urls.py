@@ -32,7 +32,8 @@ urlpatterns = [
     path('cuenta/', login_required(cuenta_usuario)),
     path('crearRepositorio/', login_required(crear_repositorio)),
     path('documentos/', login_required(mostrar_documentos)),
-    path('crearDocumento/', login_required(crear_documento))
+    path('crearDocumento/', login_required(crear_documento)),
+    path('chat/', login_required(mostrar_chat))
 ]
 
 if settings.DEBUG:

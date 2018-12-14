@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+
+{% block scripts %}
+    <script src="/static/js/chat.js"></script>
+{% endblock scripts %}
+    
+    
+{% block contenido %}
+<div class="row container">
+    <div class="col-lg-3">
+
+    </div>
+    <div class = "col-lg-9 contenedor-chat">
+        <div class = "mensajes" id="mensajes">
+            <div class="container mensaje izq">
+                <p>Holu</p>
+            </div>
+            <div class="container mensaje der">
+                <p>Ayus</p>
+            </div>
+        </div>
+        <div class="row area-texto">
+            <input type="text" class="form-control col-10" name="" id="">
+            <button class="btn btn-primary col-2" id="enviarMensaje">Enviar</button>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}
+    

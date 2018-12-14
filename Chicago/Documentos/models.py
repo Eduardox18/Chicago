@@ -46,7 +46,6 @@ class Chat(models.Model):
     idUsuarioDestinatario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='destinatario')
     mensaje = models.CharField(max_length=100)
 
-
     class Meta:
         verbose_name = 'Chat'
         verbose_name_plural = 'Chats'
