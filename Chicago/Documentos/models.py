@@ -15,7 +15,7 @@ class Documento(models.Model):
     fechaSubida = models.DateField(auto_now_add=True)
     fechaLimite = models.DateField()
     documento = models.FileField(upload_to="documentos", validators=[
-                                 FileExtensionValidator(["docx", "pdf"])])
+                                 FileExtensionValidator(["pdf"])])
     imagen_documento = models.ImageField(
         validators=[FileExtensionValidator(["jpg", "png"])], upload_to="imagenesDocumento", default="")
 

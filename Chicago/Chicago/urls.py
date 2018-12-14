@@ -33,6 +33,8 @@ urlpatterns = [
     path('crearRepositorio/', login_required(crear_repositorio)),
     path('documentos/', login_required(mostrar_documentos)),
     path('crearDocumento/', login_required(crear_documento)),
+    path('principalDocumento/<int:id_doc>', login_required(ir_principal_documento)),
+    path('deleteDocumento/<int:id_doc>', login_required(borrar_documento)),
     path('chat/', login_required(mostrar_chat))
 ]
 
