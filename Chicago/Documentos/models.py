@@ -17,7 +17,7 @@ class Documento(models.Model):
     documento = models.FileField(upload_to="documentos", validators=[
                                  FileExtensionValidator(["docx", "pdf"])])
     imagen_documento = models.ImageField(
-        validators=[FileExtensionValidator(["jpg", "png"])], upload_to="imagenesDocumento")
+        validators=[FileExtensionValidator(["jpg", "png"])], upload_to="imagenesDocumento", default="")
 
     class Meta:
         verbose_name = 'Documento'
@@ -27,7 +27,7 @@ class Permiso(models.Model):
     idUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     idDocumento = models.ForeignKey(Documento, on_delete = models.CASCADE)
     firmado = models.BooleanField()
-    esPropietario = models.BooleanField()
+    esPropietario = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Permiso'
