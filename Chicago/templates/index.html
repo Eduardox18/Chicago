@@ -1,15 +1,6 @@
 {% extends "base.html" %}
 {% block titulo %}Página principal{% endblock %}
 
-
-{% block breadcrumb %}
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb" id="migajas">
-        <li class="breadcrumb-item active" aria-current="page">Inicio</li>
-    </ol>
-</nav>
-{% endblock breadcrumb %}
-
 {% block contenido %}
 {% if mensaje == 'error' %}
 <div class="alert alert-danger alert-dismissible fade show" role="alert">

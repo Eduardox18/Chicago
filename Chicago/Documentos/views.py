@@ -2,12 +2,14 @@ from django.shortcuts import render, redirect
 from Documentos.forms import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.db import transaction
 from django import forms
+from .models import *
 
 def ingresar(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
-            return redirect('/index/')
+            return redirect('/documentos/')
         else:
             return render(request, "login.html")
     
@@ -17,9 +19,9 @@ def ingresar(request):
         user = authenticate(username = username, password = password)
         if user is not None:
             login(request, user)
-            return redirect('/index/')
+            return redirect('/documentos/')
         else:
-            return render(request, 'login.html', {'mensaje':'error'})
+            return render(request, 'documentos.html', {'mensaje':'error'})
 
 def registrar(request):
     if request.method == 'GET':
@@ -36,20 +38,23 @@ def registrar(request):
             return render(request, 'registro.html',{'form':form})
 
 def abrir_home(request):
-    return render(request, "index.html")
+    return render(request, "documentos.html")
 
+'''
 def mostrar_repositorios(request):
     if request.method == "GET":
         repositorios = Repositorio.objects.filter(idUsuario = request.user)
         context = {'repositorios': repositorios}
         return render(request, "repositorios.html", context)
+'''
 
-def mostrar_documentos(request, id_repo):
-    documentos = Documento.objects.filter(idRepositorio = id_repo)
-    nombre_repo = Repositorio.objects.get(id = id_repo)
-    id_repo = nombre_repo.id
-    nombre_repo = nombre_repo.nombre
-    context = {"documentos": documentos, "nombre_repo": nombre_repo, "id_repo": id_repo}
+def mostrar_documentos(request):
+    permisos = Permiso.objects.filter(idUsuario = request.user)
+    ids = []
+    for permiso in permisos:
+        ids.append(permiso.idDocumento.id)
+    documentos = Documento.objects.filter(pk__in=ids)
+    context = {"documentos": documentos}
     return render(request, "documentos.html", context)
 
 def mostrar_info(request):
@@ -74,12 +79,13 @@ def cuenta_usuario(request):
 
 def borrar_usuario(request):
     if request.method == 'POST':
-        usuario = User.objects.get(username=request.user.username)
+        usuario = Usuario.objects.get(username=request.user.username)
         print(usuario.username)
         usuario.is_active = False
         usuario.save()
         logout(request)
         return redirect('/login/')
+
 
 def crear_repositorio(request):
     repositorioForm = RepositorioForm()
@@ -96,7 +102,8 @@ def crear_repositorio(request):
         else:
             return render(request,'registro_repositorio.html',{'form':repositorioForm})
 
-def crear_documento(request, id_repo):
+@transaction.atomic
+def crear_documento(request):
     documentoForm = DocumentoForm()
 
     if request.method == "GET":
@@ -107,9 +114,11 @@ def crear_documento(request, id_repo):
             #Recupera el nombre de archivo y lo separa de la extensión
             nombre_archivo = request.FILES["documento"].name.split(".")
             documentoForm.instance.nombreDoc = nombre_archivo[0]
-            documentoForm.instance.idRepositorio_id = id_repo
             documentoForm.save()
-            return redirect("/documentos/"+str(id_repo))
+            id_documento = Documento.objects.latest("id")
+            permiso = Permiso(idUsuario=request.user, idDocumento=id_documento, esPropietario = True, firmado = False)
+            permiso.save()
+            return redirect("/documentos")
         else:
             context = {'form': documentoForm, 'mensaje': 'error'}
             return render(request,'registro_documento.html', context)

@@ -50,9 +50,9 @@
 			<ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
 				{% if user.is_authenticated %}
 				<li class="nav-item" data-toggle="tooltip" data-placement="right" title="Mis repositorios">
-					<a class="nav-link" href="/repositorios/">
-						<i class="fa fa-folder" aria-hidden="true"></i>
-						<span class="nav-link-text">Mis repositorios</span>
+					<a class="nav-link" href="/documentos/">
+						<i class="fa fa-file" aria-hidden="true"></i>
+						<span class="nav-link-text">Mis documentos</span>
 					</a>
 				</li>
 				{% endif %}
@@ -176,8 +176,6 @@
 	</nav>
 	<div class="content-wrapper">
 		<div class="container-fluid">
-
-			{% block breadcrumb %}{% endblock breadcrumb %}
 
 			<h2>{% block titulo %}{% endblock %}</h2>
 

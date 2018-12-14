@@ -24,15 +24,15 @@ from django.conf.urls import url,include
 urlpatterns = [
     path('login/', ingresar),
     path('registro/', registrar),
-    path('index/', login_required(abrir_home)),
+    #path('index/', login_required(abrir_home)),
     path('logout/', salir),
-    path('repositorios/', login_required(mostrar_repositorios)),
+    #path('repositorios/', login_required(mostrar_repositorios)),
     path('info/', mostrar_info),
     path('delete/', login_required(borrar_usuario)),
     path('cuenta/', login_required(cuenta_usuario)),
     path('crearRepositorio/', login_required(crear_repositorio)),
-    path('documentos/<int:id_repo>', login_required(mostrar_documentos)),
-    path('crearDocumento/<int:id_repo>', login_required(crear_documento))
+    path('documentos/', login_required(mostrar_documentos)),
+    path('crearDocumento/', login_required(crear_documento))
 ]
 
 if settings.DEBUG:
