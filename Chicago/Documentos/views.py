@@ -14,9 +14,12 @@ def ingresar(request):
             return render(request, "login.html")
     
     elif request.method == 'POST':
-        username = request.POST.get('username', None)
+        email = request.POST.get('email', None)
         password = request.POST.get('password', None)
-        user = authenticate(username = username, password = password)
+
+        usuario = Usuario.objects.get(email = email)
+
+        user = authenticate(username = usuario.username, password = password)
         if user is not None:
             login(request, user)
             return redirect('/documentos/')
@@ -78,13 +81,16 @@ def cuenta_usuario(request):
         return render(request, "cuenta.html", {"form": form})
 
 def borrar_usuario(request):
-    if request.method == 'POST':
-        usuario = Usuario.objects.get(username=request.user.username)
-        print(usuario.username)
-        usuario.is_active = False
-        usuario.save()
-        logout(request)
-        return redirect('/login/')
+    usuario = Usuario.objects.get(username=request.user.username)
+    usuario.is_active = False
+    usuario.save()
+    logout(request)
+    return redirect('/login/')
+
+def borrar_documento(request, id_doc):
+    documento = Documento.objects.get(id = id_doc)
+    documento.delete()
+    return redirect('/documentos/')
 
 
 def crear_repositorio(request):
@@ -122,6 +128,17 @@ def crear_documento(request):
         else:
             context = {'form': documentoForm, 'mensaje': 'error'}
             return render(request,'registro_documento.html', context)
+
+def ir_principal_documento(request, id_doc):
+    permiso = Permiso.objects.get(idUsuario = request.user, idDocumento = id_doc)
+    documento = Documento.objects.get(id = id_doc)
+
+    if request.method == "GET":
+        info = {}
+        info["esPropietario"] = permiso.esPropietario
+        info["documento"] = documento
+        context = {'info': info}
+        return render(request, 'principal_documento.html', context)
 
 def salir(request):
     logout(request)

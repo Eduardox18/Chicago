@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block titulo %}Información de {{info.documento.nombreDoc}}{% endblock %}
+
+{% block contenido %}
+
+<div class="container-fluid">
+
+    <a class="btn btn-primary btn-block" href="/media/{{info.documento.documento}}" target="_blank">Visualizar</a>
+    <button id="button" class="btn btn-primary btn-block">Firmar</button>
+
+    {% if info.esPropietario %}
+
+    <a data-toggle="modal" data-target="#eliminarDocumentoModal"><button class="btn btn-danger">Eliminar</button></a>
+
+    {% endif %}
+</div>
+
+<div class="modal fade" id="eliminarDocumentoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">¿Eliminar documento?
+                </h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">¿Seguro que desea eliminar el documento?</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                <a class="btn btn-danger" href="/deleteDocumento/{{info.documento.id}}">Eliminar</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}
