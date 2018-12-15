@@ -23,14 +23,17 @@ def ingresar(request):
         email = request.POST.get('email', None)
         password = request.POST.get('password', None)
 
-        usuario = Usuario.objects.get(email=email)
+        try:
+            usuario = Usuario.objects.get(email=email)
+        except Usuario.DoesNotExist:
+            usuario = None
 
-        user = authenticate(username=usuario.username, password=password)
-        if user is not None:
+        if usuario is not None:
+            user = authenticate(username=usuario.username, password=password)
             login(request, user)
             return redirect('/documentos/')
         else:
-            return render(request, 'documentos.html', {'mensaje': 'error'})
+            return render(request, 'login.html', {'mensaje': 'error'})
 
 
 def registrar(request):
