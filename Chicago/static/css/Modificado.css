@@ -19,24 +19,27 @@ body{
 .mensajes {
     border: 2px solid #efefef;
     border-radius: 10px;
-    height: 100%;
-    display: block;
+    height: 400px;
+    max-height: 400px;
     padding: 5mm;
     margin-bottom: 20px;
+    overflow-y: scroll;
 }
 
 .mensaje {
-    width: 60%;
+    text-align: left;
+    width: 40%;
     border-radius: 50px;
     margin-bottom: 10px;
     font-weight: 400;
     vertical-align: middle;
+    padding-top: 2px;
 }
 
 .der {
-    border: 2px solid #fafafa;
+    border: 2px solid #efefef;
     margin-right: 0px;
-    background-color: #fafafa;
+    background-color: #efefef;
     color: #333a40;
 }
 
@@ -47,6 +50,6 @@ body{
     color: #fafafa;
 }
 
-.area-texto {
-    
+#enviarMensaje {
+    margin-right: 0!important;
 }

@@ -23,6 +23,7 @@
 	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 	<script src="/static/js/base.js"></script>
+	<script src="/static/js/chat.js"></script>
 	<script src="/static/js/busqueda.js"></script>
 
 	{% block estilos %}{% endblock %}
@@ -55,11 +56,16 @@
 						<span class="nav-link-text">Mis documentos</span>
 					</a>
 				</li>
-				<li class="nav-item" data-toggle="tooltip" data-placement="right" title="Chat">
-					<a class="nav-link" href="/chat/">
-						<i class="fa fa-comments" aria-hidden="true"></i>
-						<span class="nav-link-text">Chat</span>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="chat" role="button" data-toggle="dropdown" aria-haspopup="true"
+					 aria-expanded="false">
+						<i class="fa fa-comments"></i>
+						<span>Chat</span>
 					</a>
+					<div class="dropdown-menu" id="drop-usuarios" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 63px, 0px);">
+						<h6 class="dropdown-header">Usuarios</h6>
+						<div class="dropdown-divider"></div>
+					</div>
 				</li>
 				{% endif %}
 				<li class="nav-item" data-toggle="tooltip" data-placement="right" title="Acerca de...">
@@ -138,8 +144,8 @@
 				<!--Logout-->
 				{% if user.is_authenticated %}
 				<li class="nav-item">
-					<a class="btn btn-danger" href="/cuenta/">
-						<i class="fa fa-fw fa-user-circle"></i>{{ user.username }}</a>
+					<a class="btn btn-danger" href="/cuenta/" id="nombreUsuario">
+						<i class="fa fa-fw fa-user-circle"></i>{{user.username}}</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" data-toggle="modal" data-target="#exampleModal">
@@ -181,9 +187,9 @@
 		</div>
 	</nav>
 	<div class="content-wrapper">
-		<div class="container-fluid">
+		<div class="container-fluid" style="heigth: 100%;">
 
-			<h2>{% block titulo %}{% endblock %}</h2>
+			<h2 id="titulo-pag">{% block titulo %}{% endblock %}</h2>
 
 			<h6>{% block subtitulo %}{% endblock subtitulo %}</h6>
 
@@ -192,9 +198,6 @@
 			</div>
 		</div>
 		<!-- /.container-fluid-->
-
-		
-
 		<!-- /.content-wrapper-->
 		<footer class="sticky-footer">
 			<div class="container">
