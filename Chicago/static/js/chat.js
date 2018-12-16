@@ -6,7 +6,7 @@ $(document).ready(function () {
                 type: "post",
                 url: "/enviarMensaje/",
                 data: {
-                    "destinatario": $("#titulo-pag").text().replace(/\s/g, ''),
+                    "destinatario": $("#mensajes").attr('name'),
                     "mensaje": $("#espacioMensaje").val(),
                     "csrfmiddlewaretoken": $('input[name=csrfmiddlewaretoken]').val(),
                 },
@@ -20,19 +20,6 @@ $(document).ready(function () {
     });
     mensajes();
     setInterval(mensajes, 3000);
-    $.ajax({
-        type: "post",
-        url: "/usuarios/",
-        dataType: "json",
-        success: function (response) {
-            lista = JSON.parse(response.lista);
-            lista.forEach(function (usuario) {
-                $("#drop-usuarios").append('<a class="dropdown-item" href="/chat/' + usuario.fields.username + '">' + usuario.fields.username + '</a>');
-            });
-        }
-    });
-    
-    
 });
 
 function mensajes(){
@@ -55,7 +42,6 @@ function mensajes(){
                 }
             })
             $('#mensajes').scrollTop($('#mensajes')[0].scrollHeight);
-
         }
     });
 }

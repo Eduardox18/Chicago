@@ -33,22 +33,25 @@ class Permiso(models.Model):
         verbose_name = 'Permiso'
         verbose_name_plural = 'Permisos'
 
-class Notificacion(models.Model):
-    idUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    idDocumento = models.ForeignKey(Documento, on_delete = models.CASCADE)
-
-    class Meta:
-        verbose_name = 'Notificacion'
-        verbose_name_plural = 'Notificaciones'
-
 class Chat(models.Model):
-    idUsuarioRemitente = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='remitente')
-    idUsuarioDestinatario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='destinatario')
+    idUsuarioRemitente = models.ForeignKey(
+        Usuario, on_delete=models.CASCADE, related_name='remitente')
+    idUsuarioDestinatario = models.ForeignKey(
+        Usuario, on_delete=models.CASCADE, related_name='destinatario')
     mensaje = models.CharField(max_length=100)
 
     class Meta:
         verbose_name = 'Chat'
         verbose_name_plural = 'Chats'
 
+class Notificacion(models.Model):
+    idUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    idDocumento = models.ForeignKey(
+        Documento, on_delete = models.CASCADE, blank = True, null = True, default = None)
+    idMensaje = models.ForeignKey(
+        Chat, on_delete=models.CASCADE, blank=True, null=True, default=None)
+    visto = models.BooleanField(default=False)
 
-
+    class Meta:
+        verbose_name = 'Notificacion'
+        verbose_name_plural = 'Notificaciones'

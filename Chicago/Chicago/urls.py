@@ -37,6 +37,7 @@ urlpatterns = [
     path('enviarMensaje/', mandar_mensaje),
     path('usuarios/', ajax_recuperar_usuarios),
     path('recuperarMesajes/', ajax_recuperar_mensajes),
+    path('notificaciones/', ajax_recuperar_notificaciones),
 ]
 
 if settings.DEBUG:

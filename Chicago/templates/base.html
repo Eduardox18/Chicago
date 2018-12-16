@@ -23,8 +23,6 @@
 	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 	<script src="/static/js/base.js"></script>
-	<script src="/static/js/chat.js"></script>
-	<script src="/static/js/busqueda.js"></script>
 
 	{% block estilos %}{% endblock %}
 	{% block scripts %}{% endblock %}
@@ -62,7 +60,7 @@
 						<i class="fa fa-comments"></i>
 						<span>Chat</span>
 					</a>
-					<div class="dropdown-menu" id="drop-usuarios" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 63px, 0px);">
+					<div class="dropdown-menu" id="drop-usuarios" aria-labelledby="chatDropdown" x-placement="bottom-start">
 						<h6 class="dropdown-header">Usuarios</h6>
 						<div class="dropdown-divider"></div>
 					</div>
@@ -87,7 +85,6 @@
 			<!--Vídeos subiendo-->
 			<ul class="navbar-nav ml-auto">
 				{% if user.is_authenticated %}
-				<!--Vídeos subiendo-->
 				<!--Notificaciones -->
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle mr-lg-2" id="alertsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true"
@@ -122,24 +119,17 @@
 
 					</div>
 				</li>
+				<!--Buscar-->
+					{% if request.get_full_path == "/documentos/" %}
+						<li class="nav-item">
+							<form id="buscar" action="/search/" method="POST" class="form-inline my-2 my-lg-0 mr-lg-2">{% csrf_token %}
+								<div class="input-group">
+									<input class="form-control" type="text" id="busqueda" placeholder="Buscar documentos" required name="nombre_documento">
+								</div>
+							</form>
+						</li>
+					{% endif %}
 				{% endif %}
-				<!--Notificaciones -->
-				<!--Búsqueda -->
-				{% if user.is_authenticated %}
-				<li class="nav-item">
-					<form id="buscar" action="/search/" method="POST" class="form-inline my-2 my-lg-0 mr-lg-2">{% csrf_token %}
-						<div class="input-group">
-							<input class="form-control" type="text" id="busqueda" placeholder="Buscar documentos" required name="nombre_documento">
-							<span class="input-group-btn">
-								<button id="button-buscar" class="btn btn-light" type="submit">
-									<i class="fa fa-search"></i>
-								</button>
-							</span>
-						</div>
-					</form>
-				</li>
-				{% endif %}
-				<!--Búsqueda-->
 
 				<!--Logout-->
 				{% if user.is_authenticated %}

@@ -1,4 +1,4 @@
-body{
+html, body{
     font-family: 'Quicksand', sans-serif!important;
 }
 
@@ -19,8 +19,8 @@ body{
 .mensajes {
     border: 2px solid #efefef;
     border-radius: 10px;
-    height: 400px;
-    max-height: 400px;
+    height: 450px;
+    max-height: 450px;
     padding: 5mm;
     margin-bottom: 20px;
     overflow-y: scroll;

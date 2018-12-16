@@ -1,12 +1,16 @@
-$(function() {
-    $("#buscar").submit(function( event ) {
-        if($("#busqueda").val().trim()=== "") {
-            event.preventDefault()
-            $("#busqueda").addClass('is-invalid');
-            $("#button-buscar").css('background-color','red');
-      }   
-      });
+$(document).ready(function () {
+    $("#busqueda").on('input', function (e) {
+        e.preventDefault();
+        var prenda = $("#busqueda").val().toLowerCase();
+        if (prenda != ""){
+            $("#fila_docs").children().show();
+            $("#fila_docs").children().each(function(){
+                if (!this.innerText.replace(/\s/g, '').toLowerCase().includes(prenda)){
+                    if (this.id != "creador"){
+                        $(this).hide();
+                    }
+                }
+            })
+        }
+    });
 });
-
-
-

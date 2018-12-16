@@ -1,6 +1,12 @@
 {% extends "base.html" %}   
 
 {% block titulo %}{{username}}{% endblock titulo %}
+
+
+{% block scripts %}
+    <script src="/static/js/chat.js"></script>
+{% endblock scripts %}
+    
     
 {% block contenido %}
 <div class="container">
@@ -9,7 +15,7 @@
         <form class="row area-texto" method="POST">
             {% csrf_token %}
             <input type="text" class="form-control col-9" id="espacioMensaje" placeholder="Mensaje" maxlength="100">
-            <button class="btn btn-primary col-2" id="enviarMensaje">Enviar</button>
+            <button class="btn btn-primary col-3" id="enviarMensaje">Enviar</button>
         </form>
     </center>
 </div>

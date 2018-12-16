@@ -2,20 +2,25 @@
 
 {% block titulo %}Documentos{% endblock %}
 
+{% block scripts %}
+    <script src="/static/js/busqueda.js"></script>
+{% endblock scripts %}
+    
+
 {% block contenido %}
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="row" id="fila_docs">
 
         {% for documento in documentos %}
-        <div class="col-6 col-sm-4 col-md-4 col-lg-3 col-xl-2">
+        <div class="col-6 col-sm-4 col-md-4 col-lg-3 col-xl-2 documento">
             <div class="card-body">
                 <a href="/principalDocumento/{{documento.id}}"><img src="/media/icons/baseline-insert_drive_file-24px.svg" class="img-thumbnail"></a>
                 <p class="card-title text-center">{{documento.nombreDoc}}</p>
             </div>
         </div>
         {% endfor %}
-        <div class="col-6 col-sm-4 col-md-4 col-lg-3 col-xl-2">
+        <div class="col-6 col-sm-4 col-md-4 col-lg-3 col-xl-2 documento" id="creador">
             <div class="card-body">
                 <a href="/crearDocumento/{{id_repo}}"><img src="/media/icons/baseline-note_add-24px.svg" class="img-thumbnail"></a>
                 <p class="card-title text-center">Nuevo</p>

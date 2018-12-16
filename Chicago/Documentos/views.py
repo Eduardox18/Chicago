@@ -171,7 +171,7 @@ def mostrar_chat(request, username):
 def mandar_mensaje(request):
     if request.method == "POST":
         destinatario = request.POST.get("destinatario")
-        id_destinatario = Usuario.objects.get(username=destinatario)
+        id_destinatario = Usuario.objects.get(pk=destinatario)
         mensaje = request.POST.get("mensaje")
 
         try:
@@ -184,7 +184,6 @@ def mandar_mensaje(request):
             data = {"resultado": False}
 
         return JsonResponse(data)
-
 
 @csrf_exempt
 def ajax_recuperar_usuarios(request):
@@ -200,6 +199,12 @@ def ajax_recuperar_mensajes(request):
         Q(idUsuarioRemitente=remitente) & Q(idUsuarioDestinatario=destinatario) | Q(idUsuarioDestinatario=remitente) & Q(idUsuarioRemitente=destinatario))
     mensajes = serializers.serialize("json", mensajes_recuperados)
     return JsonResponse({"mensajes": mensajes})
+
+@csrf_exempt
+def ajax_recuperar_notificaciones(request):
+    notificaciones = Notificacion.objects.filter(visto=False)
+    notif_usuarios = serializers.serialize("json", notificaciones)
+    return JsonResponse({"notificaciones": notif_usuarios})
 
 def salir(request):
     logout(request)
