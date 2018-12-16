@@ -1,7 +1,8 @@
-from django.db import models
 from django import forms
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import AbstractUser, User
 from django.core.validators import FileExtensionValidator
+from django.db import models
+
 
 class Usuario(AbstractUser):
     imagen_perfil = models.ImageField(
@@ -45,7 +46,10 @@ class Chat(models.Model):
         verbose_name_plural = 'Chats'
 
 class Notificacion(models.Model):
-    idUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    idUsuario = models.ForeignKey(
+        Usuario, on_delete=models.CASCADE, related_name='usuario')
+    idRemitente = models.ForeignKey(
+        Usuario, on_delete=models.CASCADE, related_name='emisor')
     idDocumento = models.ForeignKey(
         Documento, on_delete = models.CASCADE, blank = True, null = True, default = None)
     idMensaje = models.ForeignKey(

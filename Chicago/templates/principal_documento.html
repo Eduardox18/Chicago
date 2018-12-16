@@ -3,12 +3,15 @@
 {% block titulo %}Información de {{info.documento.nombreDoc}}{% endblock %}
 
 {% block contenido %}
-
 <div class="container">
-    <a class="btn btn-primary" href="/media/{{info.documento.documento}}" target="_blank">Visualizar</a>
+    <a class="btn btn-primary" href="/media/{{info.documento.documento}}" target="_blank">
+        Visualizar
+    </a>
     <button id="button" class="btn btn-primary">Firmar</button>
     {% if info.esPropietario %}
-    <a data-toggle="modal" data-target="#eliminarDocumentoModal"><button class="btn btn-danger">Eliminar</button></a>
+    <a data-toggle="modal" data-target="#eliminarDocumentoModal">
+        <button class="btn btn-danger">Eliminar</button>
+    </a>
     {% endif %}
 </div>
 

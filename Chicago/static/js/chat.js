@@ -35,7 +35,6 @@ function mensajes(){
             $("#mensajes").empty();
             lista_mensajes.forEach(function (mensaje) {
                 if (mensaje.fields.idUsuarioDestinatario == $("#mensajes").attr('name')) {
-                    console.log(mensaje)
                     $("#mensajes").append('<div class="container mensaje der"><p>' + mensaje.fields.mensaje + '</p></div >');
                 } else {
                     $("#mensajes").append('<div class="container mensaje izq"><p>' + mensaje.fields.mensaje + '</p></div >');

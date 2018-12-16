@@ -1,14 +1,14 @@
-from django.shortcuts import render, redirect
-from Documentos.forms import *
-from django.contrib.auth.models import User
+import json
+from django import forms
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.core import serializers
 from django.db import transaction
 from django.db.models import Q
-from django import forms
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
-from django.core import serializers
-import json
+from Documentos.forms import *
 from .models import *
 
 
@@ -50,19 +50,8 @@ def registrar(request):
             form = CrearUsuarioForm(request.POST)
             return render(request, 'registro.html', {'form': form})
 
-
 def abrir_home(request):
     return render(request, "documentos.html")
-
-
-'''
-def mostrar_repositorios(request):
-    if request.method == "GET":
-        repositorios = Repositorio.objects.filter(idUsuario = request.user)
-        context = {'repositorios': repositorios}
-        return render(request, "repositorios.html", context)
-'''
-
 
 def mostrar_documentos(request):
     permisos = Permiso.objects.filter(idUsuario=request.user)
@@ -73,10 +62,8 @@ def mostrar_documentos(request):
     context = {"documentos": documentos}
     return render(request, "documentos.html", context)
 
-
 def mostrar_info(request):
     return render(request, "info.html")
-
 
 def cuenta_usuario(request):
     if request.method == 'POST':
@@ -95,7 +82,6 @@ def cuenta_usuario(request):
         form = ModificarUsuarioForm(instance=request.user)
         return render(request, "cuenta.html", {"form": form})
 
-
 def borrar_usuario(request):
     usuario = Usuario.objects.get(username=request.user.username)
     usuario.is_active = False
@@ -103,28 +89,10 @@ def borrar_usuario(request):
     logout(request)
     return redirect('/login/')
 
-
 def borrar_documento(request, id_doc):
     documento = Documento.objects.get(id=id_doc)
     documento.delete()
     return redirect('/documentos/')
-
-
-def crear_repositorio(request):
-    repositorioForm = RepositorioForm()
-
-    if request.method == "GET":
-        return render(request, "registro_repositorio.html", {'form': repositorioForm})
-    if request.method == "POST":
-        repositorioForm = RepositorioForm(request.POST)
-        if repositorioForm.is_valid():
-            repositorioForm.instance.idUsuario = request.user
-            repositorioForm.save()
-
-            return redirect("/repositorios/")
-        else:
-            return render(request, 'registro_repositorio.html', {'form': repositorioForm})
-
 
 @transaction.atomic
 def crear_documento(request):
@@ -148,7 +116,6 @@ def crear_documento(request):
             context = {'form': documentoForm, 'mensaje': 'error'}
             return render(request, 'registro_documento.html', context)
 
-
 def ir_principal_documento(request, id_doc):
     permiso = Permiso.objects.get(idUsuario=request.user, idDocumento=id_doc)
     documento = Documento.objects.get(id=id_doc)
@@ -160,13 +127,15 @@ def ir_principal_documento(request, id_doc):
         context = {'info': info}
         return render(request, 'principal_documento.html', context)
 
-
 def mostrar_chat(request, username):
     if request.method == "GET":
         usuario = Usuario.objects.get(username=username)
-        context = {"username": usuario.username, "id": usuario.id}
+        nombre = usuario.first_name + " " + usuario.last_name
+        context = {
+            "username": usuario.username, 
+            "id": usuario.id, 
+            "nombre": nombre}
         return render(request, "chat.html", context)
-
 
 def mandar_mensaje(request):
     if request.method == "POST":
@@ -201,9 +170,46 @@ def ajax_recuperar_mensajes(request):
     return JsonResponse({"mensajes": mensajes})
 
 @csrf_exempt
+def ajax_ver_notificacion(request, id_notif, tipo, clave):
+    notificacion = Notificacion.objects.get(pk=id_notif)
+    notificacion.visto = True
+    notificacion.save()
+
+    if tipo == "mensaje":
+        return mostrar_chat(request, clave)
+    else:
+        return ir_principal_documento(request, int(clave))
+
+
+@csrf_exempt
 def ajax_recuperar_notificaciones(request):
-    notificaciones = Notificacion.objects.filter(visto=False)
-    notif_usuarios = serializers.serialize("json", notificaciones)
+    notificaciones = Notificacion.objects.filter(idUsuario=request.user.id, visto=False)
+    notif_usuarios = []
+    for notificacion in notificaciones:
+        if notificacion.idDocumento == None:
+            notif_usuarios.append(
+                {
+                    "id": notificacion.id,
+                    "remitente": notificacion.idRemitente.first_name,
+                    "userRemitente": notificacion.idRemitente.username,
+                    "idMensaje": notificacion.idMensaje.id,
+                    "mensaje": notificacion.idMensaje.mensaje,
+                    "idDocumento": "",
+                    "nombreDoc": "",
+                }
+            )
+        else:
+            notif_usuarios.append(
+                {
+                    "id": notificacion.id,
+                    "remitente": notificacion.idRemitente.first_name,
+                    "userRemitente": notificacion.idRemitente.username,
+                    "idMensaje": "",
+                    "mensaje": "",
+                    "idDocumento": notificacion.idDocumento.id,
+                    "nombreDoc": notificacion.idDocumento.nombreDoc,
+                }
+            )
     return JsonResponse({"notificaciones": notif_usuarios})
 
 def salir(request):

@@ -1,12 +1,10 @@
 {% extends "base.html" %}   
 
-{% block titulo %}{{username}}{% endblock titulo %}
-
+{% block titulo %}Conversación con {{nombre}}{% endblock titulo %}
 
 {% block scripts %}
     <script src="/static/js/chat.js"></script>
-{% endblock scripts %}
-    
+{% endblock scripts %}    
     
 {% block contenido %}
 <div class="container">

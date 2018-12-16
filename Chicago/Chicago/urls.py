@@ -13,13 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path
-from Documentos.views import *
-from django.contrib.auth.decorators import login_required
-from django.views.static import serve
 from django.conf import settings
-from django.conf.urls import url,include
+from django.conf.urls import include, url
+from django.contrib import admin
+from django.contrib.auth.decorators import login_required
+from django.urls import path
+from django.views.static import serve
+from Documentos.views import *
+
 
 urlpatterns = [
     path('login/', ingresar),
@@ -28,7 +29,6 @@ urlpatterns = [
     path('info/', mostrar_info),
     path('delete/', login_required(borrar_usuario)),
     path('cuenta/', login_required(cuenta_usuario)),
-    path('crearRepositorio/', login_required(crear_repositorio)),
     path('documentos/', login_required(mostrar_documentos)),
     path('crearDocumento/', login_required(crear_documento)),
     path('principalDocumento/<int:id_doc>', login_required(ir_principal_documento)),
@@ -38,6 +38,7 @@ urlpatterns = [
     path('usuarios/', ajax_recuperar_usuarios),
     path('recuperarMesajes/', ajax_recuperar_mensajes),
     path('notificaciones/', ajax_recuperar_notificaciones),
+    path('verNotificacion/<int:id_notif>/<str:tipo>/<str:clave>', ajax_ver_notificacion),
 ]
 
 if settings.DEBUG:

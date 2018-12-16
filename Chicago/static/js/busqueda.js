@@ -1,6 +1,5 @@
 $(document).ready(function () {
     $("#busqueda").on('input', function (e) {
-        e.preventDefault();
         var prenda = $("#busqueda").val().toLowerCase();
         if (prenda != ""){
             $("#fila_docs").children().show();

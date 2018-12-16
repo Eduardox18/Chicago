@@ -1,33 +1,4 @@
-$(document).ready(function () {
-	usuarios();
-	setInterval(usuarios, 3000);
-});
 
-function usuarios(){
-	$.ajax({
-		type: "post",
-		url: "/usuarios/",
-		dataType: "json",
-		success: function (response) {
-			lista = JSON.parse(response.lista);
-			$("#drop-usuarios").empty();
-			lista.forEach(function (usuario) {
-				$("#drop-usuarios").append('<a class="dropdown-item" href="/chat/' + usuario.fields.username + '">' + usuario.fields.username + '</a>');
-			});
-		}
-	});
-}
-
-function notificaciones(){
-	$.ajax({
-		type: "post",
-		url: "/notificaciones/",
-		dataType: "dataType",
-		success: function (response) {
-			
-		}
-	});
-}
 
 /*$(function() {
   notificaciones()
