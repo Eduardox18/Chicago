@@ -9,6 +9,24 @@
 
 {% block contenido %}
 
+{% if info.mensaje == 'firmado' %}
+<div class="alert alert-info alert-dismissible fade show" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>Se ha firmado con éxito el documento.</strong>
+</div>
+{% endif %}
+
+{% if info.mensaje == 'noFirmado' %}
+<div class="alert alert-info alert-dismissible fade show" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>No es la clave, muérete.</strong>
+</div>
+{% endif %}
+
 <div class="container-fluid">
     <div class="row" id="fila_docs">
 

@@ -7,12 +7,21 @@
     <a class="btn btn-primary" href="/media/{{info.documento.documento}}" target="_blank">
         Visualizar
     </a>
-    <button id="button" class="btn btn-primary">Firmar</button>
+    <a id="button" class="btn btn-primary" href="/firmar/{{info.documento.id}}">Firmar</a>
     {% if info.esPropietario %}
     <a data-toggle="modal" data-target="#eliminarDocumentoModal">
         <button class="btn btn-danger">Eliminar</button>
     </a>
     {% endif %}
+    <div>
+        <br>
+        <label>Faltan por firmar:</label>
+        <ul class="list-group">
+            {% for usuario in info.usuarios %}
+            <li class="list-group-item">{{usuario}}</li>
+            {% endfor %}
+          </ul>
+    </div>
 </div>
 
 <div class="modal fade" id="eliminarDocumentoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

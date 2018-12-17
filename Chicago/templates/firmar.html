@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block titulo %}Firmar{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="card card-register mx-auto mt-18">
+        <div class="card-header">
+            Firmar documento
+            <i class="fa fa-cloud" aria-hidden="true" style="color:black"></i>
+        </div>
+        <div class="card-body">
+            <form action="" method="post" id="form" enctype="multipart/form-data">
+                {% csrf_token %} {{ form|crispy }}
+                <button type="submit" class="btn btn-primary btn-block" value="Submit">
+                    Firmar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

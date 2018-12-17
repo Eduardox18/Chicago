@@ -26,5 +26,5 @@ urlpatterns = [
     path('verNotificacion/<int:id_notif>/<str:tipo>/<str:clave>', ajax_ver_notificacion),
     path('activate<uid>/<token>', activate, name="activate"),
     path('compartirDocumento/', ajax_compartir_documento),
-    
+    path('firmar/<int:id_documento>', ir_firmar_documento),
 ]

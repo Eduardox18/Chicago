@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.forms import ModelForm, PasswordInput
+from django.core.validators import FileExtensionValidator
 from Documentos.models import *
 
 
@@ -26,3 +27,7 @@ class DocumentoForm(ModelForm):
             "documento",
             "fechaLimite"
         )
+
+class FirmarForm(forms.Form):
+    llave = forms.FileField(validators=[FileExtensionValidator(["pem"])])
+    clave_archivo = forms.CharField()

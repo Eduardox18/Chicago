@@ -16,6 +16,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from .token import activation_token
 import hashlib
+from .generator import *
 
 
 def ingresar(request):
@@ -85,8 +86,10 @@ def activate(request, uid, token):
         raise Http404("No se encontró el usuario")
     if usuario is not None and activation_token.check_token(usuario,token):
         usuario.is_active=True
+        ruta_certificado = Generator.generate_key(usuario.username)
+        usuario.certificado = ruta_certificado
         usuario.save()
-        return HttpResponse ("<h2>Cuenta activada. Ahora puedes iniciar sesión <a href='/login'>Iniciar sesión</a></h2>")
+        return HttpResponse ("<h2>Cuenta activada. Ahora puedes iniciar sesión haciendo <a href='/login'>click aquí</a></h2>")
     else:
         return HttpResponse ("<h3>Link de activación inválido</h3>")
 
@@ -175,10 +178,17 @@ def ir_principal_documento(request, id_doc):
     permiso = Permiso.objects.get(idUsuario=request.user, idDocumento=id_doc)
     documento = Documento.objects.get(id=id_doc)
 
+    falta_firmar = Permiso.objects.filter(idDocumento = id_doc, firmado = False)
+    usuarios = []
+
+    for permiso in falta_firmar:
+        usuarios.append(permiso.idUsuario.first_name)
+
     if request.method == "GET":
         info = {}
         info["esPropietario"] = permiso.esPropietario
         info["documento"] = documento
+        info["usuarios"] = usuarios
         context = {'info': info}
         return render(request, 'principal_documento.html', context)
 
@@ -204,10 +214,62 @@ def mandar_mensaje(request):
             chat.save()
             data = {"resultado": True}
         except:
-            print("error")
             data = {"resultado": False}
 
         return JsonResponse(data)
+
+def ir_firmar_documento(request, id_documento):
+    firmarForm = FirmarForm()
+
+    if request.method == "GET":
+        return render(request, 'firmar.html', {'form': firmarForm})
+    elif request.method == "POST":
+        firmarForm = FirmarForm(request.POST, request.FILES)
+        if firmarForm.is_valid():
+            archivo = request.FILES["llave"]
+            data_enviada = archivo.read()
+            clave = request.POST["clave_archivo"]
+            usuario = Usuario.objects.get(id = request.user.id)
+
+            with open("/Users/lalo/Repositories/Chicago/Chicago/" + settings.MEDIA_URL + '/certificados/private_key_' + usuario.username + '.pem', 'rb') as myfile:
+                data_guardada = myfile.read()
+            
+            permisos = Permiso.objects.filter(idUsuario=request.user, esPropietario = True)
+            ids = []
+            for permiso in permisos:
+                ids.append(permiso.idDocumento.id)
+            documentos = Documento.objects.filter(pk__in=ids)
+
+            permisos = Permiso.objects.filter(idUsuario=request.user, esPropietario = False)
+            ids = []
+            for permiso in permisos:
+                ids.append(permiso.idDocumento.id)
+            documentosCompartidos = Documento.objects.filter(pk__in=ids)
+            usuarios = Usuario.objects.exclude(username = request.user.username)
+            
+
+            info = {}
+            info["documentos"] = documentos
+            info["documentosCompartidos"] = documentosCompartidos
+            info["usuarios"] = usuarios
+            info["id_documento"] = id_documento
+
+            cifrada = hashlib.sha256(clave.encode()).hexdigest()
+
+            if (data_enviada == data_guardada and usuario.clave_certificado == cifrada):
+                permiso = Permiso.objects.get(idUsuario = request.user, idDocumento = id_documento)
+                permiso.firmado = True
+                permiso.save()
+                info["mensaje"] = 'firmado'
+                context = {'info': info}
+                return render(request, "documentos.html", context)
+            else:
+                info["mensaje"] = 'noFirmado'
+                context = {'form': firmarForm, 'info': info}
+                return render(request, "documentos.html", context)
+        else:
+            context = {'form': firmarForm, 'mensaje': 'error'}
+            return render(request, 'firmar.html', context)
 
 @csrf_exempt
 def ajax_recuperar_usuarios(request):
@@ -269,9 +331,7 @@ def ajax_recuperar_notificaciones(request):
 
 @csrf_exempt
 def ajax_compartir_documento(request):
-    print(request.POST.get("lista_usuarios"))
-    print(request.POST.get("id_documento"))
-    lista_usuarios = request.POST.get("lista_usuarios")
+    lista_usuarios = request.POST.getlist("lista_usuarios")
     documento = Documento.objects.get(id = int(request.POST.get("id_documento")))
 
     for usuario in lista_usuarios:
