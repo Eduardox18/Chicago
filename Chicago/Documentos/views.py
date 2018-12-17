@@ -1,3 +1,5 @@
+import json
+import os
 from django.shortcuts import render, redirect, HttpResponse, Http404, get_object_or_404
 from Documentos.forms import *
 from django.contrib.auth.models import User
@@ -8,7 +10,6 @@ from django import forms
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
-import json
 from .models import *
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -149,6 +150,7 @@ def borrar_usuario(request):
 
 def borrar_documento(request, id_doc):
     documento = Documento.objects.get(id=id_doc)
+    os.remove(documento.documento.path)
     documento.delete()
     return redirect('/documentos/')
 
@@ -335,18 +337,20 @@ def ajax_compartir_documento(request):
     lista_usuarios = diccionario["lista_usuarios"]
     documento = diccionario["id_documento"]
 
+    documento_recuperado = Documento.objects.get(id = int(documento))
+
     for usuario in lista_usuarios:
         recuperado = Usuario.objects.get(id = int(usuario))
         try:
             verificar = Permiso.objects.get(
-                idUsuario=recuperado, idDocumento=documento)
+                idUsuario=recuperado, idDocumento=documento_recuperado)
         except Permiso.DoesNotExist:
             verificar = None
             
-        if verificar is not None:
-            permiso = Permiso(idUsuario = recuperado, idDocumento = documento, firmado = False, esPropietario = False)
+        if verificar is None:
+            permiso = Permiso(idUsuario = recuperado, idDocumento = documento_recuperado, firmado = False, esPropietario = False)
             permiso.save()
-            notificacion = Notificacion(idUsuario = recuperado, idRemitente = request.user, idDocumento = documento, visto = False)
+            notificacion = Notificacion(idUsuario = recuperado, idRemitente = request.user, idDocumento = documento_recuperado, visto = False)
             notificacion.save()
     
     return JsonResponse({"documento": 1})

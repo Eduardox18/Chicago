@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser, User
 from django.core.validators import FileExtensionValidator
 from django.db import models
 
-
 class Usuario(AbstractUser):
     imagen_perfil = models.ImageField(
         validators=[FileExtensionValidator(["jpg", "png"])], upload_to="imagenesPerfil")
@@ -18,7 +17,7 @@ class Documento(models.Model):
     fechaSubida = models.DateField(auto_now_add=True)
     fechaLimite = models.DateField()
     documento = models.FileField(upload_to="documentos", validators=[
-                                 FileExtensionValidator(["pdf"])])
+                                 FileExtensionValidator(["docx", "xlsx", "pdf"])])
     imagen_documento = models.ImageField(
         validators=[FileExtensionValidator(["jpg", "png"])], upload_to="imagenesDocumento", default="")
 
