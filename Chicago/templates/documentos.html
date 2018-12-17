@@ -4,6 +4,7 @@
 
 {% block scripts %}
     <script src="/static/js/busqueda.js"></script>
+    <script src="/static/js/documentos.js"></script>
 {% endblock scripts %}
 
 {% block contenido %}
@@ -11,18 +12,58 @@
 <div class="container-fluid">
     <div class="row" id="fila_docs">
 
-        {% for documento in documentos %}
+        {% for documento in info.documentos %}
         <div class="col-6 col-sm-4 col-md-4 col-lg-3 col-xl-2 documento">
-            <div class="card-body">
+            <div class="card-body text-center">
+                <a href="/principalDocumento/{{documento.id}}"><img src="/media/icons/baseline-insert_drive_file-24px.svg" class="img-thumbnail"></a>
+                <p class="card-title text-center">{{documento.nombreDoc}}</p>
+                <a data-toggle="modal" data-target="#compartirDocumentoModal">
+                        <button class="btn btn-primary clase-documento" name="{{documento.id}}">Compartir</button>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for documento in info.documentosCompartidos %}
+        <div class="col-6 col-sm-4 col-md-4 col-lg-3 col-xl-2 documento">
+            <div class="card-body text-center">
                 <a href="/principalDocumento/{{documento.id}}"><img src="/media/icons/baseline-insert_drive_file-24px.svg" class="img-thumbnail"></a>
                 <p class="card-title text-center">{{documento.nombreDoc}}</p>
             </div>
         </div>
         {% endfor %}
+
         <div class="col-6 col-sm-4 col-md-4 col-lg-3 col-xl-2 documento" id="creador">
             <div class="card-body">
                 <a href="/crearDocumento/{{id_repo}}"><img src="/media/icons/baseline-note_add-24px.svg" class="img-thumbnail"></a>
                 <p class="card-title text-center">Nuevo</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="compartirDocumentoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Compatir documento
+                </h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Seleccione el usuario con el que desea compartir el documento</div>
+            <div class="text-center">
+                <select id="usuarios" multiple="multiple">
+                    {% for usuario in info.usuarios %}
+                    <option value="{{usuario.id}}">{{usuario.first_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <br>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                <a id="btnCompartir" class="btn btn-primary" data-dismiss="modal">Compartir</a>
             </div>
         </div>
     </div>

@@ -90,12 +90,26 @@ def abrir_home(request):
     return render(request, "documentos.html")
 
 def mostrar_documentos(request):
-    permisos = Permiso.objects.filter(idUsuario=request.user)
+    permisos = Permiso.objects.filter(idUsuario=request.user, esPropietario = True)
     ids = []
     for permiso in permisos:
         ids.append(permiso.idDocumento.id)
     documentos = Documento.objects.filter(pk__in=ids)
-    context = {"documentos": documentos}
+
+    permisos = Permiso.objects.filter(idUsuario=request.user, esPropietario = False)
+    ids = []
+    for permiso in permisos:
+        ids.append(permiso.idDocumento.id)
+    documentosCompartidos = Documento.objects.filter(pk__in=ids)
+    usuarios = Usuario.objects.exclude(username = request.user.username)
+    
+
+    info = {}
+    info["documentos"] = documentos
+    info["documentosCompartidos"] = documentosCompartidos
+    info["usuarios"] = usuarios
+
+    context = {"info": info}
     return render(request, "documentos.html", context)
 
 def mostrar_info(request):
@@ -247,6 +261,22 @@ def ajax_recuperar_notificaciones(request):
                 }
             )
     return JsonResponse({"notificaciones": notif_usuarios})
+
+@csrf_exempt
+def ajax_compartir_documento(request):
+    print(request.POST.get("lista_usuarios"))
+    print(request.POST.get("id_documento"))
+    lista_usuarios = request.POST.get("lista_usuarios")
+    documento = Documento.objects.get(id = int(request.POST.get("id_documento")))
+
+    for usuario in lista_usuarios:
+        recuperado = Usuario.objects.get(id = int(usuario))
+        permiso = Permiso(idUsuario = recuperado, idDocumento = documento, firmado = False, esPropietario = False)
+        permiso.save()
+        notificacion = Notificacion(idUsuario = recuperado, idRemitente = request.user, idDocumento = documento, visto = False)
+        notificacion.save()
+    
+    return JsonResponse({"documento": 1})
 
 def salir(request):
     logout(request)

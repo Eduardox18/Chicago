@@ -53,3 +53,7 @@ html, body{
 #enviarMensaje {
     margin-right: 0!important;
 }
+
+#usuarios {
+    width: 100%!important;
+}

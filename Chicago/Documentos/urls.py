@@ -24,8 +24,7 @@ urlpatterns = [
     path('recuperarMesajes/', ajax_recuperar_mensajes),
     path('notificaciones/', ajax_recuperar_notificaciones),
     path('verNotificacion/<int:id_notif>/<str:tipo>/<str:clave>', ajax_ver_notificacion),
-    
-    #confirmación de cuentas 
     path('activate<uid>/<token>', activate, name="activate"),
+    path('compartirDocumento/', ajax_compartir_documento),
     
 ]
