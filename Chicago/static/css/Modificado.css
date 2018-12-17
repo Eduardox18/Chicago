@@ -57,3 +57,9 @@ html, body{
 #usuarios {
     width: 100%!important;
 }
+
+.imagen-bb{
+    width: 40%;
+    border: 2px solid #333a40;
+    border-radius: 100%;
+}

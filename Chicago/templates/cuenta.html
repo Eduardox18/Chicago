@@ -8,6 +8,11 @@
     <div class="card card-register mx-auto mt-18">
         <div class="card-header">Información de la cuenta</div>
         <div class="card-body">
+            <center>
+                <img src="/media/{{user.imagen_perfil}}" alt="" class="imagen-bb">
+            </center>
+        </div>
+        <div class="card-body">
             <form action="" method="post" id="form" enctype="multipart/form-data">
                 {% csrf_token %} 
                 {{ form|crispy }}
@@ -16,6 +21,12 @@
                 </button>
             </form>
 
+        </div>
+    </div>
+    <div class="card card-register mx-auto mt-18">
+        <div class="card-header">Descargar certificado</div>
+        <div class="card-body">
+            <button class="btn btn-primary">Descargar certificado</button>
         </div>
     </div>
     <div class="card card-register mx-auto mt-18">

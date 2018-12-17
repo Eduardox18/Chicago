@@ -15,6 +15,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.mail import send_mail
 from .token import activation_token
+import hashlib
 
 
 def ingresar(request):
@@ -34,9 +35,12 @@ def ingresar(request):
             usuario = None
 
         if usuario is not None:
-            user = authenticate(username=usuario.username, password=password)
-            login(request, user)
-            return redirect('/documentos/')
+            if usuario.is_active:
+                user = authenticate(username=usuario.username, password=password)
+                login(request, user)
+                return redirect('/documentos/')
+            else:
+                return render(request, 'login.html', {'mensaje': 'success'})
         else:
             return render(request, 'login.html', {'mensaje': 'error'})
 
@@ -50,6 +54,7 @@ def registrar(request):
         if form.is_valid():
             instance = form.save(commit = False)
             instance.is_active=False
+            instance.clave_certificado = hashlib.sha256(instance.clave_certificado.encode()).hexdigest()
             instance.save()
             site=get_current_site(request)
             email = request.POST.get('email', None)

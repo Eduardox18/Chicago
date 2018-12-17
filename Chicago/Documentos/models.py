@@ -7,6 +7,7 @@ from django.db import models
 class Usuario(AbstractUser):
     imagen_perfil = models.ImageField(
         validators=[FileExtensionValidator(["jpg", "png"])], upload_to="imagenesPerfil")
+    clave_certificado = models.CharField(max_length=100)
 
     def __str__(self):
         return self.username
