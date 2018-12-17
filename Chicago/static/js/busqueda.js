@@ -1,15 +1,17 @@
 $(document).ready(function () {
     $("#busqueda").on('input', function (e) {
-        var prenda = $("#busqueda").val().toLowerCase();
-        if (prenda != ""){
+        var busqueda = $("#busqueda").val().toLowerCase();
+        if (busqueda != ""){
             $("#fila_docs").children().show();
             $("#fila_docs").children().each(function(){
-                if (!this.innerText.replace(/\s/g, '').toLowerCase().includes(prenda)){
+                if (!this.innerText.replace(/\s/g, '').toLowerCase().startsWith(busqueda)){
                     if (this.id != "creador"){
                         $(this).hide();
                     }
                 }
             })
+        } else {
+            $("#fila_docs").children().show();
         }
     });
 });

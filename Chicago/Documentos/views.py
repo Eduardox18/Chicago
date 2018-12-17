@@ -231,7 +231,7 @@ def ir_firmar_documento(request, id_documento):
             clave = request.POST["clave_archivo"]
             usuario = Usuario.objects.get(id = request.user.id)
 
-            with open("/Users/lalo/Repositories/Chicago/Chicago/" + settings.MEDIA_URL + '/certificados/private_key_' + usuario.username + '.pem', 'rb') as myfile:
+            with open('./media/certificados/private_key_' + usuario.username + '.pem', 'rb') as myfile:
                 data_guardada = myfile.read()
             
             permisos = Permiso.objects.filter(idUsuario=request.user, esPropietario = True)
@@ -331,15 +331,23 @@ def ajax_recuperar_notificaciones(request):
 
 @csrf_exempt
 def ajax_compartir_documento(request):
-    lista_usuarios = request.POST.getlist("lista_usuarios")
-    documento = Documento.objects.get(id = int(request.POST.get("id_documento")))
+    diccionario = json.loads(request.POST.get("values"))
+    lista_usuarios = diccionario["lista_usuarios"]
+    documento = diccionario["id_documento"]
 
     for usuario in lista_usuarios:
         recuperado = Usuario.objects.get(id = int(usuario))
-        permiso = Permiso(idUsuario = recuperado, idDocumento = documento, firmado = False, esPropietario = False)
-        permiso.save()
-        notificacion = Notificacion(idUsuario = recuperado, idRemitente = request.user, idDocumento = documento, visto = False)
-        notificacion.save()
+        try:
+            verificar = Permiso.objects.get(
+                idUsuario=recuperado, idDocumento=documento)
+        except Permiso.DoesNotExist:
+            verificar = None
+            
+        if verificar is not None:
+            permiso = Permiso(idUsuario = recuperado, idDocumento = documento, firmado = False, esPropietario = False)
+            permiso.save()
+            notificacion = Notificacion(idUsuario = recuperado, idRemitente = request.user, idDocumento = documento, visto = False)
+            notificacion.save()
     
     return JsonResponse({"documento": 1})
 
