@@ -1,15 +1,20 @@
-import json
-from django import forms
-from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect, HttpResponse, Http404, get_object_or_404
+from Documentos.forms import *
 from django.contrib.auth.models import User
-from django.core import serializers
+from django.contrib.auth import authenticate, login, logout
 from django.db import transaction
 from django.db.models import Q
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
+from django import forms
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from Documentos.forms import *
+from django.core import serializers
+import json
 from .models import *
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.conf import settings
+from django.core.mail import send_mail
+from .token import activation_token
 
 
 def ingresar(request):
@@ -43,12 +48,43 @@ def registrar(request):
     elif request.method == 'POST':
         form = CrearUsuarioForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return render(request, 'login.html', {'form': form})
+            instance = form.save(commit = False)
+            instance.is_active=False
+            instance.save()
+            site=get_current_site(request)
+            email = request.POST.get('email', None)
+            #envio de mensaje de confirmación send_mail(subject, message, from_email, to_list, fail_silentry=True)
+            subject='Confirmación de cuenta Chicago'
+            message=render_to_string('confirm_email.html', {
+                "user":instance,
+                "domain":site.domain,
+                "uid":instance.id,
+                "token":activation_token.make_token(instance)
+            })
+            to_list=[email]
+            from_email=settings.EMAIL_HOST_USER
+            send_mail(subject, message, from_email, to_list, fail_silently=True)
+
+            #return HttpResponse ("<h1>Gracias por registrarte, el correo de confirmación fue enviado a tu email</h1>")
+            return render(request, 'login.html', {'form': form, 'mensaje':'success'})
         else:
             print("no jaló")
             form = CrearUsuarioForm(request.POST)
             return render(request, 'registro.html', {'form': form})
+
+
+def activate(request, uid, token):
+    try:
+        usuario=get_object_or_404(Usuario,pk=uid)
+    except:
+        raise Http404("No se encontró el usuario")
+    if usuario is not None and activation_token.check_token(usuario,token):
+        usuario.is_active=True
+        usuario.save()
+        return HttpResponse ("<h2>Cuenta activada. Ahora puedes iniciar sesión <a href='/login'>Iniciar sesión</a></h2>")
+    else:
+        return HttpResponse ("<h3>Link de activación inválido</h3>")
+
 
 def abrir_home(request):
     return render(request, "documentos.html")

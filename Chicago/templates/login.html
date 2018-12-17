@@ -11,6 +11,14 @@
     <strong>Usuario o contraseña incorrectos</strong>
 </div>
 {% endif %}
+{% if mensaje == 'success' %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>Gracias por registrarte, se envío un link al email proporcionado para activar tu cuenta.</strong>
+</div>
+{% endif %}
 
 <div class="container">
     <div class="card card-login mx-auto mt-5">

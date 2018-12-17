@@ -1,0 +1,5 @@
+{% autoescape off %}
+Gracias por registrarte en Chicago Cloud.
+Por favor da click sobre el link para confirmar tu cuenta. 
+http://{{ domain }}{% url 'documentos:activate' uid=uid token=token %}
+{% endautoescape %}
