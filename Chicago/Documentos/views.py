@@ -18,6 +18,9 @@ from django.core.mail import send_mail
 from .token import activation_token
 import hashlib
 from .generator import *
+from PyPDF2 import PdfFileReader, PdfFileWriter
+import PyPDF2 
+from fpdf import FPDF
 
 
 def ingresar(request):
@@ -259,6 +262,36 @@ def ir_firmar_documento(request, id_documento):
             cifrada = hashlib.sha256(clave.encode()).hexdigest()
 
             if (data_enviada == data_guardada and usuario.clave_certificado == cifrada):
+
+                documento_reemplazo = Documento.objects.get(id = id_documento)
+                pdfFileObj = open(documento_reemplazo.documento.path, 'rb') 
+                pdfReader = PyPDF2.PdfFileReader(pdfFileObj) 
+
+                texto_insertar = str(request.user.username) + str(data_guardada)
+                pdf = FPDF()
+                pdf.add_page()
+                pdf.set_font('arial', '', 10.0)
+                pdf.multi_cell(180, 10, texto_insertar)
+                ruta_proxima = settings.MEDIA_ROOT + '/temporal/' + request.user.username + 'temporal.pdf'
+                pdf.output(ruta_proxima, 'F')
+
+                pdfOne = PdfFileReader(open(documento_reemplazo.documento.path, "rb"))
+                pdfTwo = PdfFileReader(open(ruta_proxima, "rb"))
+
+                output = PdfFileWriter()
+                for i in range(pdfReader.numPages):
+                    output.addPage(pdfOne.getPage(i))
+                
+                output.addPage(pdfTwo.getPage(0))
+                
+                ruta_nueva = documento_reemplazo.documento.path
+
+                os.remove(documento_reemplazo.documento.path)
+
+                outputStream = open(ruta_nueva, "wb")
+                output.write(outputStream)
+                outputStream.close()
+
                 permiso = Permiso.objects.get(idUsuario = request.user, idDocumento = id_documento)
                 permiso.firmado = True
                 permiso.save()
